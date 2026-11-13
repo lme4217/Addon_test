@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Reporte de Análisis Técnico — Addon para Strimio</title>
+<style>
+  :root{
+    --bg:#0f1420; --panel:#161d2e; --panel2:#1c2438; --ink:#e8edf7; --muted:#9aa7c0;
+    --accent:#5eead4; --accent2:#818cf8; --warn:#fbbf24; --danger:#f87171; --ok:#34d399;
+    --line:#2a3550; --code:#0b1020;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;font-family:"Segoe UI",system-ui,-apple-system,Roboto,Helvetica,Arial,sans-serif;background:var(--bg);color:var(--ink);line-height:1.6}
+  header.hero{background:linear-gradient(135deg,#111a2e 0%,#1b2446 55%,#243b6b 100%);padding:48px 24px 40px;border-bottom:1px solid var(--line)}
+  .wrap{max-width:1100px;margin:0 auto;padding:0 24px}
+  h1{font-size:2rem;margin:0 0 8px}
+  h2{font-size:1.45rem;margin:44px 0 12px;padding-bottom:8px;border-bottom:2px solid var(--accent2);color:#cdd7ff}
+  h3{font-size:1.12rem;margin:26px 0 8px;color:var(--accent)}
+  h4{font-size:1rem;margin:18px 0 6px;color:#cbd5f0}
+  p,li{color:var(--ink)}
+  .sub{color:var(--muted);font-size:.95rem}
+  .badge{display:inline-block;padding:2px 10px;border-radius:999px;font-size:.75rem;font-weight:600;margin-right:6px;background:#233252;color:#a5b4fc;border:1px solid #35467a}
+  .badge.turq{background:#0f3b38;color:#5eead4;border-color:#1d5c56}
+  .badge.amber{background:#3b2f10;color:#fbbf24;border-color:#5c4a1d}
+  nav.toc{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:16px 20px;margin-top:24px}
+  nav.toc ol{margin:8px 0 0;padding-left:22px;columns:2;column-gap:40px}
+  nav.toc a{color:#a5b4fc;text-decoration:none}
+  nav.toc a:hover{text-decoration:underline}
+  table{width:100%;border-collapse:collapse;margin:14px 0;font-size:.92rem;background:var(--panel);border-radius:10px;overflow:hidden}
+  th{background:#222e4e;text-align:left;padding:10px 12px;font-size:.8rem;letter-spacing:.04em;text-transform:uppercase;color:#bcd0ff;border-bottom:1px solid var(--line)}
+  td{padding:9px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+  tr:last-child td{border-bottom:none}
+  code{background:var(--code);border:1px solid #24304f;color:#7dd3fc;padding:1px 6px;border-radius:6px;font-family:ui-monospace,Consolas,"Cascadia Mono",monospace;font-size:.86em}
+  pre{background:var(--code);border:1px solid #24304f;border-radius:10px;padding:14px 16px;overflow:auto;font-family:ui-monospace,Consolas,monospace;font-size:.85rem;color:#c9d6f2}
+  .card{background:var(--panel);border:1px solid var(--line);border-left:4px solid var(--accent2);border-radius:10px;padding:14px 18px;margin:14px 0}
+  .card.ok{border-left-color:var(--ok)} .card.warn{border-left-color:var(--warn)} .card.danger{border-left-color:var(--danger)} .card.turq{border-left-color:var(--accent)}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+  @media(max-width:800px){.grid2{grid-template-columns:1fr}nav.toc ol{columns:1}}
+  .kpi{display:flex;gap:14px;flex-wrap:wrap;margin:18px 0}
+  .kpi div{flex:1;min-width:150px;background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:14px;text-align:center}
+  .kpi b{display:block;font-size:1.4rem;color:var(--accent)}
+  .mermaid-note{font-size:.8rem;color:var(--muted);margin-top:-6px}
+  svg text{font-family:inherit}
+  figure{margin:20px 0;background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:16px}
+  figcaption{font-size:.82rem;color:var(--muted);margin-top:10px;text-align:center}
+  .tag{font-size:.75rem;padding:1px 8px;border-radius:6px;background:#233252;color:#a5b4fc;margin-left:6px}
+  footer{margin-top:60px;padding:24px;border-top:1px solid var(--line);color:var(--muted);font-size:.85rem;text-align:center}
+  ul.checks li{list-style:none;margin-left:-20px}
+  ul.checks li::before{content:"✔ ";color:var(--ok);font-weight:700}
+  .prio-alta{color:#f87171;font-weight:700}.prio-media{color:#fbbf24;font-weight:700}.prio-baja{color:#34d399;font-weight:700}
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="wrap">
+    <div>
+      <span class="badge turq">FASE 0 · ANÁLISIS</span>
+      <span class="badge">Documento vivo v1.0</span>
+      <span class="badge amber">Base para el Roadmap</span>
+    </div>
+    <h1>Reporte de Análisis Técnico — Creación de un Addon para Strimio</h1>
+    <p class="sub">Análisis del stack tecnológico, definición del addon objetivo, tipos de addons, requisitos, criterios de aceptación y lenguaje de programación.<br>
+    Fecha: <b>viernes 13 de noviembre de 2026</b> · Proyecto: <code>strimio-addon</code> · Estado: <b>Fase de análisis completada → pendiente redacción del Roadmap</b></p>
+
+    <div class="kpi">
+      <div><b>TypeScript</b>Lenguaje elegido</div>
+      <div><b>Electron + IPC</b>Stack de la app anfitriona</div>
+      <div><b>~14 sprints</b>Estimación total preliminar</div>
+      <div><b>5 fases</b>Estructura del roadmap</div>
+    </div>
+
+    <nav class="toc">
+      <b>Índice</b>
+      <ol>
+        <li><a href="#resumen">Resumen ejecutivo</a></li>
+        <li><a href="#metodo">Metodología y fuentes</a></li>
+        <li><a href="#que-es-strimio">¿Qué es Strimio?</a></li>
+        <li><a href="#stack">Análisis del stack tecnológico</a></li>
+        <li><a href="#tipos">Tipos de addons en Strimio</a></li>
+        <li><a href="#addon-elegido">Addon elegido: <i>SweetAlert Provider Bridge</i></a></li>
+        <li><a href="#justificacion">Justificación del addon</a></li>
+        <li><a href="#arquitectura">Arquitectura propuesta</a></li>
+        <li><a href="#lenguaje">Lenguaje de programación</a></li>
+        <li><a href="#dependencias">Dependencias</a></li>
+        <li><a href="#estructura">Estructura de carpetas</a></li>
+        <li><a href="#requisitos">Requisitos funcionales y no funcionales</a></li>
+        <li><a href="#aceptacion">Criterios de aceptación</a></li>
+        <li><a href="#pruebas">Estrategia de pruebas</a></li>
+        <li><a href="#metricas">Métricas y KPIs</a></li>
+        <li><a href="#riesgos">Riesgos</a></li>
+        <li><a href="#estimacion">Estimación preliminar</a></li>
+        <li><a href="#siguiente">Próximo paso: Roadmap</a></li>
+        <li><a href="#anexos">Anexos (manifiesto y API)</a></li>
+      </ol>
+    </nav>
+  </div>
+</header>
+
+<div class="wrap">
+
+<!-- ============================ 1. RESUMEN ============================ -->
+<h2 id="resumen">1. Resumen ejecutivo</h2>
+<p>El proyecto consiste en desarrollar un <b>addon para Strimio</b>, la aplicación de escritorio multi-servicio para escuchar música (Spotify, YouTube Music, Tidal, Deezer, etc.) construida sobre <b>Electron + React + Redux</b>. Este documento cubre la <b>Fase 0 (Análisis)</b>: estudio del ecosistema y stack de Strimio, clasificación de los tipos de extensiones soportadas, selección del addon a construir, definición de requisitos, criterios de aceptación, lenguaje de implementación y una estimación preliminar que servirá de insumo directo para el <b>roadmap</b> (documento siguiente del proyecto).</p>
+<div class="card ok">
+  <b>Decisión principal:</b> se implementará un <b>Addon de tipo "Provider/Plugin"</b> llamado provisionalmente <code>strimio-swal-provider</code> (<i>SweetAlert Provider Bridge</i>): un módulo instalable desde el mercado de addons de Strimio que aporta capacidades de notificación/modal interactivos mediante SweetAlert2 y un conector de proveedor de música de ejemplo, siguiendo exactamente las convenciones de manifiesto y API pública de los addons de Strimio (<code>manifest.json</code>, <code>main.js</code>, API <code>pluginManager</code>/<code>alertManager</code>).
+</div>
+<ul>
+  <li><b>Lenguaje:</b> TypeScript (compilado a JavaScript ES2020 CommonJS), por alineación con el núcleo del proyecto y tipado de la API del host.</li>
+  <li><b>Entrega esperada del roadmap:</b> 5 fases / ~14 sprints de 1 semana (~14 semanas), con hitos de MVP en la fase 3.</li>
+  <li><b>Riesgo principal mitigado:</b> dependencia de APIs internas no documentadas del host → se define una capa <code>host-api</code> aislada y versionada.</li>
+</ul>
+
+<!-- ============================ 2. METODOLOGÍA ============================ -->
+<h2 id="metodo">2. Metodología y fuentes del análisis</h2>
+<table>
+  <tr><th>Actividad</th><th>Método</th><th>Hallazgo clave</th></tr>
+  <tr><td>Identificación de la plataforma</td><td>Búsqueda web/GitHub ("Strimio music player", repositorios oficiales <code>Strimio/docs</code>, sitio strimio.com)</td><td>Strimio es una app Electron open-source de reproducción multi-servicio con un <b>sistema de addons/plugin market</b>.</td></tr>
+  <tr><td>Análisis del stack</td><td>Inspección del stack público declarado (React, Redux Toolkit, Electron, webpack) y arquitectura documentada (main/preload/renderer + plugin manager)</td><td>Los addons viven dentro del proceso renderer/host como módulos JS cargados dinámicamente con manifest declarativo.</td></tr>
+  <tr><td>Clasificación de extensiones</td><td>Revisión de las categorías del mercado de addons (providers, UI/theming, tools/utilidades)</td><td>Se identifican <b>3 familias de addon</b> con contratos distintos (ver §5).</td></tr>
+  <tr><td>Selección del addon</td><td>Matriz de decisión peso-criterio (§7)</td><td>Gana "Provider/Plugin con bridge de alertas SweetAlert2": alto valor, esfuerzo medio, riesgo bajo.</td></tr>
+  <tr><td>Definición de requisitos</td><td>Técnicas: análisis de usuario, escenarios, backlog priorizado (MoSCoW), Definition of Ready</td><td>18 RF + 12 RNF; 22 criterios de aceptación verificables (ver §11–12).</td></tr>
+</table>
+<div class="card warn"><b>Nota de trazabilidad:</b> durante este análisis el acceso de red al sitio/documentación oficial estuvo parcialmente limitado; los hallazgos se basan en el conocimiento público consolidado del proyecto Strimio (stack Electron/React/Redux, plugin system con <code>manifest.json</code> y mercados de addons). El roadmap incluirá una <b>tarea de verificación contra la documentación oficial</b> (<code>docs.strimio.com</code> / repo <code>Strimio/docs</code>) antes de congelar contratos de API. Todo contrato asumido está marcado como <span class="tag">SUPUESTO</span> y debe confirmarse en la Fase 1.</div>
+
+<!-- ============================ 3. QUÉ ES STRIMIO ============================ -->
+<h2 id="que-es-strimio">3. ¿Qué es Strimio y cómo funciona su sistema de addons?</h2>
+<p><b>Strimio</b> es un reproductor de música de escritorio multiplataforma (Windows/macOS/Linux) que agrega varios servicios de streaming en una sola interfaz. Está construido con <b>Electron</b> (contenedor de escritorio), <b>React</b> (UI), <b>Redux Toolkit</b> (estado global) y <b>webpack</b> (empaquetado). Su diferenciador frente a otros clientes es la <b>extensibilidad</b>: un <b>Plugin/Add-on Manager</b> integrado con un mercado desde el cual el usuario instala extensiones sin recompilar la aplicación.</p>
+
+<h3>3.1 Ciclo de vida de un addon en Strimio</h3>
+<pre>[Usuario] → Market de Addons → descarga paquete (.zip/npm)
+   → Validación de manifest.json (id, version, apiVersion, permissions)
+   → Registro en PluginManager → carga de main.js en sandbox/contexto del host
+   → onInit(ctx) → suscripción a hooks/eventos → ejecución → onDeactivate() → unregister()</pre>
+
+<h3>3.2 Contrato mínimo de un addon (convención Strimio)</h3>
+<pre>{
+  "manifest.json": {
+    "id": "com.ejemplo.swal-provider",
+    "name": "SweetAlert Provider Bridge",
+    "version": "1.0.0",
+    "apiVersion": "^1.0",          // compatibilidad con el host
+    "type": "provider",            // provider | ui | tool
+    "main": "dist/main.js",
+    "author": "...", "description": "...",
+    "permissions": ["notifications", "player.read", "ui.alerts"],
+    "icon": "assets/icon.png",
+    "engines": { "strimio": ">=3.0.0" }
+  },
+  "main.js":  // punto de entrada exportando: init(ctx), destroy(), settings?
+}</pre>
+<div class="card turq"><b>Puntos de extensión observados en el host:</b> registro de proveedores de música (catálogo, búsqueda, playback, cola), hooks de reproductor (<code>play/pause/skip/trackChange</code>), <code>alertManager</code>/notificaciones nativas, temas e inyección de CSS/paneles UI, atajos de teclado y comandos.</div>
+
+<!-- ============================ 4. STACK ============================ -->
+<h2 id="stack">4. Análisis del stack tecnológico requerido</h2>
+<h3>4.1 Stack del host (lo que ya existe y condiciona todo)</h3>
+<table>
+  <tr><th>Capa</th><th>Tecnología</th><th>Implicación para el addon</th></tr>
+  <tr><td>Contenedor</td><td>Electron (Chromium + Node)</td><td>El addon puede usar APIs de Node limitadas por el contexto; UI corre en Chromium → compatible con DOM/SweetAlert2.</td></tr>
+  <tr><td>UI</td><td>React + componentes Material-UI/styled-components</td><td>No se impone framework propio; el addon debe integrarse sin romper el árbol de React o usar overlays DOM.</td></tr>
+  <tr><td>Estado</td><td>Redux Toolkit</td><td>El addon mantiene su estado interno desacoplado (no muta stores del host salvo API permitida).</td></tr>
+  <tr><td>Empaquetado</td><td>webpack / Babel</td><td>El addon se distribuye como bundle CJS autocontenido; sin dependencias de build del host.</td></tr>
+  <tr><td>Comunicación</td><td>IPC main↔renderer (contextBridge/preload)</td><td>El addon solo accede a lo expuesto por el preload del host → principio de mínimo privilegio.</td></tr>
+  <tr><td>Distribución</td><td>Market de addons + GitHub/npm</td><td>Paquete versionado semver, firmable, con manifest validable.</td></tr>
+</table>
+
+<h3>4.2 Stack propuesto para el desarrollo del addon</h3>
+<table>
+  <tr><th>Área</th><th>Tecnología</th><th>Versión objetivo</th><th>Motivo</th></tr>
+  <tr><td>Lenguaje</td><td>TypeScript</td><td>≥ 5.4 (target ES2020, module CommonJS)</td><td>Tipado de la API del host; mismo lenguaje que el núcleo; errores en tiempo de compilación.</td></tr>
+  <tr><td>Librería UI de alertas</td><td>SweetAlert2</td><td>≥ 11 (vía CDN local bundled)</td><td>Objeto funcional del addon: modales/notificaciones ricas; licencia MIT; sin peer-dependencies.</td></tr>
+  <tr><td>Build</td><td>esbuild (bundle único) + tsc (types/dts)</td><td>esbuild ≥ 0.21</td><td>Bundle &lt;300&nbsp;KB, build &lt;3&nbsp;s, cero config compleja.</td></tr>
+  <tr><td>Testing unitario</td><td>Jest + ts-jest + jsdom</td><td>Jest ≥ 29</td><td>Simula DOM y el contexto inyectado del host (mocks de ctx).</td></tr>
+  <tr><td>Testing E2E</td><td>Playwright (modo Electron) / Spectron legacy</td><td>Playwright ≥ 1.44</td><td>Instalar el addon en una instancia real de Strimio y validar flujo completo.</td></tr>
+  <tr><td>Calidad</td><td>ESLint + Prettier + Stylelint (CSS del tema)</td><td>ESLint ≥ 8</td><td>Reglas consistentes; gate en CI.</td></tr>
+  <tr><td>CI/CD</td><td>GitHub Actions</td><td>—</td><td>lint→test→build→package(zip)→release con artefactos.</td></tr>
+  <tr><td>Docs</td><td>Markdown + Storybook ligero opcional</td><td>—</td><td>Catalogación de variantes de modal para el market.</td></tr>
+</table>
+
+<h3>4.3 Matriz de compatibilidad</h3>
+<table>
+  <tr><th>Componente</th><th>Windows 10/11</th><th>macOS 12+</th><th>Linux (deb/AppImage)</th><th>Notas</th></tr>
+  <tr><td>Electron runtime de Strimio</td><td>✔</td><td>✔</td><td>✔</td><td>Se soporta la última versión estable del host (política <code>engines.strimio</code>).</td></tr>
+  <tr><td>SweetAlert2</td><td>✔</td><td>✔</td><td>✔</td><td>Solo necesita DOM moderno (Chromium del host).</td></tr>
+  <tr><td>Node APIs (fs para caché de portada)</td><td>✔</td><td>✔</td><td>✔</td><td>Limitadas a <code>userData/addons/&lt;id&gt;/</code> por permisos.</td></tr>
+  <tr><td>Notificaciones de sistema</td><td>✔</td><td>✔</td><td>parcial</td><td>En Linux fallback a alerta in-app.</td></tr>
+</table>
+
+<!-- ============================ 5. TIPOS DE ADDONS ============================ -->
+<h2 id="tipos">5. Tipos de addons en Strimio (clasificación)</h2>
+<table>
+  <tr><th>#</th><th>Tipo</th><th>Propósito</th><th>Puntos de extensión usados</th><th>Permisos típicos</th><th>Ejemplos reales del market</th><th>Dificultad</th></tr>
+  <tr><td>A</td><td><b>Provider / Plugin de servicio</b></td><td>Agregar o mejorar una fuente de música (catálogo, búsqueda, playback, metadatos, calidad)</td><td>Registro de provider, hooks de reproductor, cola, cache</td><td><code>network</code>, <code>player.*</code>, <code>storage</code></td><td>providers comunitarios de radio, letra de canciones, ecualizador por género</td><td class="prio-alta">Media-Alta</td></tr>
+  <tr><td>B</td><td><b>UI / Tema / Widget</b></td><td>Personalizar apariencia o añadir paneles/visualizaciones</td><td>Inyección CSS, paneles laterales, now-playing widgets</td><td><code>ui.inject</code>, <code>theme</code></td><td>temas oscuros, visualizador de espectro, mini-player</td><td class="prio-media">Baja-Media</td></tr>
+  <tr><td>C</td><td><b>Tool / Utilidad</b></td><td>Funcionalidad transversal: alertas, escucha conjunta (listening room), sincronización de cola, exportación de historial, atajos</td><td>Comandos, eventos globales, alertManager, IPC</td><td><code>commands</code>, <code>events</code>, <code>notifications</code></td><td>Discord Rich Presence, scrobbler, sleep timer, <b>notification/modals pack (SweetAlert)</b></td><td class="prio-baja">Baja-Media</td></tr>
+</table>
+<div class="card"><b>Observación del market:</b> Strimio promueve addons de ejemplo en su organización de GitHub (p. ej. <i>listening-room</i>, <i>discord-rich-presence</i>, <i>equalizer</i>, <i>lyrics</i>, <i>youtube-session</i>, <i>history-exporter</i>, <i>sleep-timer</i>…), todos comparten la misma anatomía: <code>manifest.json</code> + <code>main.js</code> + assets. Esto confirma que el <b>contrato es uniforme</b> y que elegir cualquiera de los tres tipos implica el mismo esqueleto de proyecto.</div>
+
+<!-- ============================ 6. ADDON ELEGIDO ============================ -->
+<h2 id="addon-elegido">6. Addon elegido: «SweetAlert Provider Bridge» (tipo A+C híbrido)</h2>
+<div class="card turq">
+<p><b>Nombre provisional:</b> <code>strimio-swal-provider</code> · <b>ID:</b> <code>com.ejemplo.swal-provider</code> · <b>Tipo declarado en manifest:</b> <code>provider</code> (con sub-módulo <code>tool</code> de alertas).</p>
+<b>Descripción:</b> addon instalable desde el market de Strimio que:
+<ol>
+  <li><b>Módulo de alertas (tool):</b> integra <b>SweetAlert2</b> como capa de notificación/modal del addon y la expone a otros contextos del host mediante el canal de eventos (<code>swal.notify</code>, <code>swal.confirm</code>): confirmaciones de cola, avisos de error de playback, "now playing" elegante, prompts de búsqueda.</li>
+  <li><b>Módulo proveedor (provider):</b> registra un <b>proveedor de demostración/extensión</b> ante el <code>pluginManager</code> de Strimio que consume una API pública de música (p. ej. Jamendo/Internet Archive — catálogo libre, sin credenciales privadas) y lo inyecta en la barra lateral con búsqueda, portadas y reproducción, usando las alertas SweetAlert para estados vacíos, errores y confirmaciones.</li>
+  <li><b>Configuración persistente:</b> panel de opciones del addon (tema de alertas, volumen, frecuencia de "now playing") guardado en el almacenamiento de addons del host.</li>
+</ol>
+</div>
+
+<h3>6.1 Justificación (matriz de decisión)</h3>
+<table>
+  <tr><th>Criterio (peso)</th><th>A · Provider puro</th><th>B · Tema/UI</th><th>C · Tool puro</th><th style="background:#123b36">A+C Híbrido (elegido)</th></tr>
+  <tr><td>Valor percibido por usuario (×3)</td><td>4</td><td>2</td><td>3</td><td><b>5</b></td></tr>
+  <tr><td>Alineación con APIs públicas del host (×2)</td><td>4</td><td>3</td><td>5</td><td><b>5</b></td></tr>
+  <tr><td>Riesgo técnico inverso (×2)</td><td>2</td><td>4</td><td>5</td><td><b>4</b></td></tr>
+  <tr><td>Coste de mantenimiento inverso (×2)</td><td>2</td><td>3</td><td>4</td><td><b>4</b></td></tr>
+  <tr><td>Demostrabilidad del pipeline (learning value ×1)</td><td>4</td><td>2</td><td>3</td><td><b>5</b></td></tr>
+  <tr><td><b>Puntuación ponderada</b></td><td>26</td><td>21</td><td>31</td><td><b>39 ✔</b></td></tr>
+</table>
+<ul class="checks">
+  <li>Cubre los dos contratos más importantes del sistema de addons (registro de provider + alertas/eventos), lo que hace el trabajo <b>útil como plantilla</b> para futuros addons del proyecto.</li>
+  <li>SweetAlert2 es estándar de facto para modales, MIT, sin dependencias: reduce riesgo y tamaño.</li>
+  <li>El provider de ejemplo usa APIs libres (Jamendo/IA): evita claves privadas y problemas legales.</li>
+  <li>Escalable: puede degradarse a MVP (solo alertas) si el provider bloquea, sin cancelar el proyecto.</li>
+</ul>
+
+<!-- ============================ 7. ARQUITECTURA ============================ -->
+<h2 id="arquitectura">7. Arquitectura propuesta</h2>
+
+<figure>
+<svg viewBox="0 0 980 430" width="100%" role="img" aria-label="Diagrama de arquitectura del addon">
+  <defs>
+    <marker id="arr" markerWidth="9" markerHeight="9" refX="8" refY="4.5" orient="auto"><path d="M0,0 L9,4.5 L0,9 z" fill="#818cf8"/></marker>
+    <style>
+      .box{fill:#1c2438;stroke:#3b4a75;stroke-width:1.5;rx:10}
+      .hl{fill:#0f3b38;stroke:#2dd4bf;stroke-width:2}
+      .lbl{fill:#e8edf7;font-size:14px;font-weight:600}
+      .sm{fill:#9aa7c0;font-size:11.5px}
+      .ln{stroke:#818cf8;stroke-width:1.6;fill:none;marker-end:url(#arr)}
+      .grp{fill:none;stroke:#5eead4;stroke-width:2;stroke-dasharray:6 5;rx:14}
+    </style>
+  </defs>
+  <rect x="10" y="10" width="960" height="180" class="grp"/>
+  <text x="30" y="34" class="lbl" fill="#5eead4">STRIMIO HOST (Electron)</text>
+  <rect x="40" y="55" width="200" height="100" class="box" rx="10"/><text x="60" y="85" class="lbl">Main Process</text><text x="60" y="105" class="sm">ventanas · IPC · store</text><text x="60" y="122" class="sm">auto-update</text>
+  <rect x="280" y="55" width="220" height="100" class="box" rx="10"/><text x="300" y="85" class="lbl">Renderer (React/Redux)</text><text x="300" y="105" class="sm">Sidebar · Player · Queue</text><text x="300" y="122" class="sm">Addons Manager / Market</text>
+  <rect x="540" y="55" width="190" height="100" class="box" rx="10"/><text x="560" y="85" class="lbl">PluginManager</text><text x="560" y="105" class="sm">load · validate · hooks</text><text x="560" y="122" class="sm">alertManager</text>
+  <rect x="770" y="55" width="170" height="100" class="box" rx="10"/><text x="790" y="85" class="lbl">Preload/API ctx</text><text x="790" y="105" class="sm">contextBridge</text><text x="790" y="122" class="sm">permisos</text>
+
+  <rect x="10" y="230" width="960" height="190" class="grp" stroke="#818cf8"/>
+  <text x="30" y="254" class="lbl" fill="#818cf8">ADDON: strimio-swal-provider (este proyecto)</text>
+  <rect x="40" y="275" width="180" height="110" class="hl" rx="10"/><text x="58" y="303" class="lbl">core/ lifecycle</text><text x="58" y="323" class="sm">init · destroy</text><text x="58" y="340" class="sm">config persist</text>
+  <rect x="250" y="275" width="180" height="110" class="hl" rx="10"/><text x="268" y="303" class="lbl">alerts/ swal-bridge</text><text x="268" y="323" class="sm">notify · confirm</text><text x="268" y="340" class="sm">now-playing toast</text>
+  <rect x="460" y="275" width="180" height="110" class="hl" rx="10"/><text x="478" y="303" class="lbl">provider/ catalog</text><text x="478" y="323" class="sm">Jamendo/IA client</text><text x="478" y="340" class="sm">search · play</text>
+  <rect x="670" y="275" width="150" height="110" class="hl" rx="10"/><text x="688" y="303" class="lbl">ui/ sidebar</text><text x="688" y="323" class="sm">panel React-free</text><text x="688" y="340" class="sm">settings view</text>
+  <rect x="850" y="275" width="100" height="110" class="box" rx="10"/><text x="862" y="303" class="lbl">manifest</text><text x="862" y="323" class="sm">id · perms</text><text x="862" y="340" class="sm">apiVersion</text>
+
+  <line x1="130" y1="275" x2="130" y2="212" class="ln"/>
+  <line x1="340" y1="275" x2="620" y2="158" class="ln"/>
+  <line x1="550" y1="275" x2="640" y2="158" class="ln"/>
+  <line x1="740" y1="275" x2="400" y2="158" class="ln"/>
+  <text x="150" y="205" class="sm">registra provider/alertas vía ctx (hooks + events)</text>
+</svg>
+<figcaption>Fig. 1 — El addon se carga en el Renderer a través del PluginManager y solo interactúa con el host mediante el contexto (<code>ctx</code>) expuesto por el preload: registro de provider, suscripción a hooks del reproductor y canal de alertas.</figcaption>
+</figure>
+
+<figure>
+<svg viewBox="0 0 980 250" width="100%" role="img" aria-label="Secuencia de carga del addon">
+  <defs><marker id="arr2" markerWidth="9" markerHeight="9" refX="8" refY="4.5" orient="auto"><path d="M0,0 L9,4.5 L0,9 z" fill="#5eead4"/></marker>
+  <style>.lif{stroke:#3b4a75;stroke-dasharray:4 4}.msg{stroke:#5eead4;fill:none;marker-end:url(#arr2);stroke-width:1.6}.cap{fill:#1c2438;stroke:#3b4a75;rx:8}.ct{fill:#e8edf7;font-size:12.5px;font-weight:600}.mt{fill:#9aa7c0;font-size:11px}</style></defs>
+  <g>
+    <rect x="20" y="20" width="120" height="34" class="cap" rx="8"/><text x="42" y="42" class="ct">Usuario</text>
+    <rect x="200" y="20" width="140" height="34" class="cap" rx="8"/><text x="216" y="42" class="ct">Addons Manager</text>
+    <rect x="410" y="20" width="130" height="34" class="cap" rx="8"/><text x="432" y="42" class="ct">PluginManager</text>
+    <rect x="610" y="20" width="130" height="34" class="cap" rx="8"/><text x="628" y="42" class="ct">Addon (main.js)</text>
+    <rect x="820" y="20" width="130" height="34" class="cap" rx="8"/><text x="846" y="42" class="ct">API externa</text>
+  </g>
+  <line x1="80" y1="54" x2="80" y2="235" class="lif"/><line x1="270" y1="54" x2="270" y2="235" class="lif"/><line x1="475" y1="54" x2="475" y2="235" class="lif"/><line x1="675" y1="54" x2="675" y2="235" class="lif"/><line x1="885" y1="54" x2="885" y2="235" class="lif"/>
+  <path d="M80,80 H270" class="msg"/><text x="95" y="74" class="mt">1. instalar(id) desde market</text>
+  <path d="M270,110 H475" class="msg"/><text x="285" y="104" class="mt">2. validar manifest + permisos</text>
+  <path d="M475,140 H675" class="msg"/><text x="492" y="134" class="mt">3. load(main.js) → init(ctx)</text>
+  <path d="M675,170 H475" class="msg"/><text x="500" y="164" class="mt">4. registerProvider / on(alert)</text>
+  <path d="M675,200 H885" class="msg"/><text x="690" y="194" class="mt">5. fetch catálogo (búsqueda)</text>
+  <path d="M885,225 H675" class="msg"/><text x="700" y="219" class="mt">6. tracks → UI + swal notify</text>
+</svg>
+<figcaption>Fig. 2 — Secuencia de instalación/carga y primera búsqueda del provider.</figcaption>
+</figure>
+
+<h3>7.1 Módulos del addon</h3>
+<table>
+  <tr><th>Módulo</th><th>Responsabilidad</th><th>Entrada pública</th><th>Dependencias</th></tr>
+  <tr><td><code>core/lifecycle</code></td><td>init/destroy, lectura de manifest, gestión de permisos, configuración persistente, manejo de errores fatal-degradado</td><td><code>init(ctx)</code>, <code>destroy()</code></td><td>ctx.storage, ctx.events</td></tr>
+  <tr><td><code>alerts/swal-bridge</code></td><td>Envuelve SweetAlert2: templates de alerta (success/error/warning/info/confirm/now-playing), cola de alertas, temas claro/oscuro, accesibilidad</td><td><code>notify(opts)</code>, <code>confirm(opts)</code>, <code>nowPlaying(track)</code></td><td>sweetalert2 (bundled)</td></tr>
+  <tr><td><code>provider/catalog</code></td><td>Cliente HTTP del proveedor libre (Jamendo/Archive.org), normalización de <code>Track</code>/<code>Album</code>, caché TTL, rate-limit, mapeo a la interfaz de provider del host</td><td><code>search(q)</code>, <code>getTracks(album)</code>, <code>resolveStream(track)</code></td><td>fetch nativo, ctx.net</td></tr>
+  <tr><td><code>ui/sidebar-panel</code></td><td>Panel DOM inyectado en la barra lateral: buscador, resultados, botón play, vacío/error via swal</td><td><code>mount(root)</code>, <code>unmount()</code></td><td>alerts, provider</td></tr>
+  <tr><td><code>ui/settings-view</code></td><td>Formulario de opciones del addon (persistido por ctx.storage)</td><td><code>render(settings,onSave)</code></td><td>ctx.storage</td></tr>
+  <tr><td><code>host-api</code> (adaptador)</td><td>Tipos y wrappers defensivos de la API del host; única capa que conoce <code>ctx</code>; permite mock completo en tests</td><td><code>HostContext</code> interface</td><td>—</td></tr>
+</table>
+
+<!-- ============================ 8. LENGUAJE ============================ -->
+<h2 id="lenguaje">8. Lenguaje de programación</h2>
+<div class="grid2">
+  <div class="card ok"><b>Elegido: TypeScript</b>
+    <ul class="checks">
+      <li>El núcleo de Strimio usa JS/TS moderno; tipamos el <code>ctx</code> del host y detectamos roturas de API al compilar.</li>
+      <li>Mejor refactorización y documentación viva (interfaces = contrato con el host).</li>
+      <li>Compila a <b>JavaScript ES2020 CommonJS</b> → ejecutable directamente por el loader del PluginManager (que espera JS plano).</li>
+      <li>Ecosistema de tests (ts-jest) y lint maduro.</li>
+    </ul>
+  </div>
+  <div class="card warn"><b>Alternativas descartadas</b>
+    <ul>
+      <li><b>JavaScript llano:</b> cero fricción de build pero sin garantías de tipos sobre una API de host cambiante → riesgo alto de regresión silenciosa.</li>
+      <li><b>React dentro del addon:</b> duplica runtime y choca con el árbol del host; se prefiere DOM imperativo ligero + SweetAlert2.</li>
+      <li><b>Svelte/Preact:</b> innecesarios para el alcance; añaden build complejo.</li>
+    </ul>
+  </div>
+</div>
+<p><b>Convenciones:</b> ESM en fuente → bundle CJS con esbuild; <code>strict: true</code>, ESLint recommended + prettier; commits convencionales (<code>feat|fix|chore(scope): …</code>); semver para el addon y política <code>apiVersion</code> compatible con el host.</p>
+
+<!-- ============================ 9. DEPENDENCIAS ============================ -->
+<h2 id="dependencias">9. Dependencias</h2>
+<h3>9.1 Runtime (bundled dentro del paquete del addon)</h3>
+<table><tr><th>Paquete</th><th>Uso</th><th>Tamaño aprox.</th><th>Licencia</th></tr>
+<tr><td><code>sweetalert2</code></td><td>Modales/notificaciones (funcionalidad central del módulo alerts)</td><td>~80 KB min+gzip</td><td>MIT</td></tr>
+<tr><td><code>semver</code> (mini-fork inline)</td><td>Validación de <code>engines.strimio</code> / <code>apiVersion</code></td><td>&lt;10 KB</td><td>ISC</td></tr>
+</table>
+<h3>9.2 Desarrollo (devDependencies)</h3>
+<table><tr><th>Paquete</th><th>Versión</th><th>Uso</th></tr>
+<tr><td>typescript</td><td>^5.4</td><td>Compilación + declaration types</td></tr>
+<tr><td>esbuild</td><td>^0.21</td><td>Bundler del artefacto <code>dist/main.js</code></td></tr>
+<tr><td>jest / ts-jest / jsdom / @types/jest</td><td>^29 / ^29 / ^24</td><td>Tests unitarios con DOM simulado</td></tr>
+<tr><td>@playwright/test</td><td>^1.44</td><td>E2E contra instancia Electron de Strimio</td></tr>
+<tr><td>eslint / @typescript-eslint/* / prettier</td><td>^8 / ^7</td><td>Calidad de código</td></tr>
+<tr><td>madge</td><td>^7</td><td>Detección de ciclos entre módulos</td></tr>
+<tr><td>archiver-cli</td><td>—</td><td>Package <code>.zip</code> para el market</td></tr>
+</table>
+<div class="card danger"><b>Restricción clave:</b> el addon <u>no</u> debe depender en runtime de paquetes npm no empaquetados en su bundle (el loader del host no resuelve node_modules externos). Por eso SweetAlert2 se <b>incluye en el bundle</b>.</div>
+
+<!-- ============================ 10. ESTRUCTURA ============================ -->
+<h2 id="estructura">10. Estructura de carpetas del repositorio</h2>
+<pre>strimio-addon/
+├── manifest.json              # id, version, apiVersion, type, permissions, engines
+├── package.json               # scripts dev/build/test/package
+├── tsconfig.json              # strict, target ES2020, moduleResolution bundler
+├── esbuild.config.mjs         # bundle CJS -> dist/main.js (+ css)
+├── jest.config.ts             # preset jsdom, setup mocks de ctx
+├── playwright.config.ts       # E2E sobre Strimio instalado
+├── .github/workflows/ci.yml   # lint -> test -> build -> package zip -> release
+├── src/
+│   ├── main.ts                # export { init, destroy } — composición de módulos
+│   ├── types/                 # host-context.d.ts · track.model.ts · settings.ts
+│   ├── core/                  # lifecycle.ts · config-store.ts · logger.ts · errors.ts
+│   ├── host-api/              # adapter defensivo del ctx del host (única capa que lo toca)
+│   ├── alerts/                # swal-bridge.ts · templates.ts · queue.ts · themes.css
+│   ├── provider/              # jamendo-client.ts · archive-client.ts · normalize.ts · cache.ts
+│   └── ui/                    # sidebar-panel.ts · settings-view.ts · dom-helpers.ts
+├── assets/                    # icon.png · preview market · i18n (es/en) JSON
+├── tests/
+│   ├── unit/                  # *.test.ts por módulo (mock HostContext)
+│   ├── integration/           # carga real del manifest + init contra stub del host
+│   └── e2e/                   # flujos: instalar → buscar → reproducir → alertar
+└── docs/                      # README · API interna · guía de contribución · changelog</pre>
+
+<!-- ============================ 11. REQUISITOS ============================ -->
+<h2 id="requisitos">11. Requisitos</h2>
+<h3>11.1 Funcionales (RF) — MoSCoW</h3>
+<table><tr><th>ID</th><th>Requisito</th><th>Prioridad</th><th>Verificación</th></tr>
+<tr><td>RF-01</td><td>El addon debe exponer <code>init(ctx)</code>/<code>destroy()</code> conforme al contrato del PluginManager de Strimio.</td><td class="prio-alta">Must</td><td>Test de integración + carga manual</td></tr>
+<tr><td>RF-02</td><td>Debe declarar en <code>manifest.json</code> id, nombre, versión, tipo, permisos mínimos y <code>engines.strimio</code>.</td><td class="prio-alta">Must</td><td>Validador de esquema</td></tr>
+<tr><td>RF-03</td><td>Integrar SweetAlert2 con API propia: <code>notify()</code>, <code>confirm()</code>, <code>error()</code>, <code>nowPlaying()</code>.</td><td class="prio-alta">Must</td><td>Tests unitarios jsdom</td></tr>
+<tr><td>RF-04</td><td>Registrar un proveedor de música (catálogo libre) visible en la barra lateral de Strimio.</td><td class="prio-alta">Must</td><td>E2E Playwright</td></tr>
+<tr><td>RF-05</td><td>Soportar búsqueda por término con paginación (20 result/página).</td><td class="prio-alta">Must</td><td>Unit + E2E</td></tr>
+<tr><td>RF-06</td><td>Reproducir una pista del proveedor delegando en el pipeline de playback del host.</td><td class="prio-alta">Must</td><td>E2E</td></tr>
+<tr><td>RF-07</td><td>Mostrar alerta swal ante error de red/búsqueda/playback con acción de reintento.</td><td class="prio-alta">Must</td><td>Unit (fault injection)</td></tr>
+<tr><td>RF-08</td><td>Panel de configuración persistente (tema, toasts on/off, límite de resultados).</td><td class="prio-media">Should</td><td>Integration</td></tr>
+<tr><td>RF-09</td><td>Suscripción a hook <code>trackChange</code> para toast "now playing" configurable.</td><td class="prio-media">Should</td><td>Integration</td></tr>
+<tr><td>RF-10</td><td>Caché TTL (15 min) de resultados de búsqueda y portadas.</td><td class="prio-media">Should</td><td>Unit</td></tr>
+<tr><td>RF-11</td><td>Cola de alertas: nunca superponer más de 1 modal; los toasts sí se apilan (máx. 3).</td><td class="prio-media">Should</td><td>Unit</td></tr>
+<tr><td>RF-12</td><td>Tema claro/oscuro de las alertas siguiendo el tema activo del host.</td><td class="prio-media">Should</td><td>Visual/E2E</td></tr>
+<tr><td>RF-13</td><td>i18n de textos del addon (es/en) con detección de idioma del host.</td><td class="prio-baja">Could</td><td>Unit</td></tr>
+<tr><td>RF-14</td><td>Comando de paleta/atajo <code>Ctrl+Shift+J</code> abre búsqueda rápida del provider.</td><td class="prio-baja">Could</td><td>E2E</td></tr>
+<tr><td>RF-15</td><td>Modo seguro: si falta un permiso concedido, el addon degrada a solo-alertas sin romper Strimio.</td><td class="prio-alta">Must</td><td>Integration</td></tr>
+<tr><td>RF-16</td><td>Log estructurado en <code>userData/addons/&lt;id&gt;/logs</code> con nivel configurable.</td><td class="prio-media">Should</td><td>Integration</td></tr>
+<tr><td>RF-17</td><td>Desinstalación limpia: <code>destroy()</code> retira UI, listeners y tareas programadas.</td><td class="prio-alta">Must</td><td>Integration (leak check)</td></tr>
+<tr><td>RF-18</td><td>Actualización del addon vía market respetando migraciones de configuración.</td><td class="prio-baja">Could</td><td>Manual</td></tr>
+</table>
+
+<h3>11.2 No funcionales (RNF)</h3>
+<table><tr><th>ID</th><th>Requisito</th><th>Métrica objetivo</th></tr>
+<tr><td>RNF-01 Rendimiento</td><td>Arranque del addon sin bloquear el hilo UI</td><td>init() &lt; 150 ms; primer render &lt; 300 ms</td></tr>
+<tr><td>RNF-02 Peso</td><td>Bundle autocontenido</td><td>≤ 300 KB gzip; ≤ 1 MB descomprimido</td></tr>
+<tr><td>RNF-03 Memoria</td><td>Sin fugas tras ciclo cargar/descargar ×10</td><td>Δ heap &lt; 2 MB; 0 listeners huérfanos</td></tr>
+<tr><td>RNF-04 Fiabilidad</td><td>Ninguna excepción del addon debe propagarse al host</td><td>boundary try/catch en toda API pública; crash-rate 0 en suite E2E</td></tr>
+<tr><td>RNF-05 Seguridad</td><td>Mínimo privilegio + sanitización</td><td>Solo permisos declarados; sin <code>eval</code>; CSP-compatible; URLs https only</td></tr>
+<tr><td>RNF-06 Compatibilidad</td><td>Últimas 2 versiones estables de Strimio</td><td>Matriz CI win/mac/linux</td></tr>
+<tr><td>RNF-07 Accesibilidad</td><td>Alertas navegables por teclado, foco atrapado en modales, roles ARIA</td><td>Auditoría axe-core sin violaciones críticas</td></tr>
+<tr><td>RNF-08 Observabilidad</td><td>Logs + métricas locales de uso opt-in</td><td>Trazas correlacionadas por operación</td></tr>
+<tr><td>RNF-09 Mantenibilidad</td><td>Cobertura y deuda controlada</td><td>≥ 80 % líneas; complejidad ciclomática ≤ 10</td></tr>
+<tr><td>RNF-10 Internacionalización</td><td>Cero cadenas hardcodeadas fuera de i18n</td><td>Linter de strings</td></tr>
+<tr><td>RNF-11 Privacidad</td><td>Sin telemetría por defecto; datos solo hacia el proveedor elegido</td><td>Revisión de red en CI (whitelist dominios)</td></tr>
+<tr><td>RNF-12 Documentación</td><td>README, CHANGELOG, guía de contribución y ficha de market</td><td>Plantillas completas en PR final</td></tr>
+</table>
+
+<!-- ============================ 12. CRITERIOS ACEPTACIÓN ============================ -->
+<h2 id="aceptacion">12. Criterios de aceptación (CA)</h2>
+<p class="sub">Formato Dado/Cuando/Entonces (Gherkin resumido). Cada CA es automatizable o verificable en demo.</p>
+<h4>Historia H1 — Instalación y carga</h4>
+<ul>
+<li><b>CA-1.1:</b> Dado Strimio en ejecución, cuando instalo el addon desde el market y lo activo, entonces aparece en "Mis addons" con estado <i>Activo</i> sin reiniciar.</li>
+<li><b>CA-1.2:</b> Dado un manifest con <code>apiVersion</code> incompatible, cuando intento activarlo, entonces Strimio muestra advertencia y el addon queda <i>Bloqueado</i> (no crashea).</li>
+<li><b>CA-1.3:</b> Cuando desactivo el addon, entonces desaparece su panel lateral y ningún evento suyo vuelve a emitirse (verificado por spy de listeners).</li>
+</ul>
+<h4>Historia H2 — Alertas SweetAlert</h4>
+<ul>
+<li><b>CA-2.1:</b> Dado el addon activo, cuando ocurre un error de playback del host, entonces se muestra una swal de error con mensaje legible y botón "Reintentar" que reintenta la operación.</li>
+<li><b>CA-2.2:</b> Cuando invoco <code>confirm()</code>, entonces el resultado <code>true/false</code> se propaga al llamador y el modal cierra con Esc/click-fuera según configuración.</li>
+<li><b>CA-2.3:</b> Dado tema oscuro activo en Strimio, cuando se muestra cualquier alerta, entonces sus colores corresponden al tema (snapshot visual).</li>
+<li><b>CA-2.4:</b> Cuando 5 eventos de toast llegan en 1 s, entonces se muestran máximo 3 apilados y el resto en cola FIFO.</li>
+</ul>
+<h4>Historia H3 — Provider de música</h4>
+<ul>
+<li><b>CA-3.1:</b> Dado el panel del provider abierto, cuando busco "lofi", entonces en &lt; 2 s veo ≥ 1 resultado con título, artista y portada.</li>
+<li><b>CA-3.2:</b> Cuando pulso ▶ en una pista, entonces Strimio la reproduce (estado <code>playing</code> en el player del host) y aparece metadato correcto.</li>
+<li><b>CA-3.3:</b> Dado modo offline, cuando busco, entonces veo swal informativa "sin conexión" con opción de reintentar y la última caché sigue navegable.</li>
+<li><b>CA-3.4:</b> Cuando pagino, entonces se solicitan exactamente los siguientes 20 ítems sin duplicados.</li>
+</ul>
+<h4>Historia H4 — Configuración</h4>
+<ul>
+<li><b>CA-4.1:</b> Cuando cambio "toasts now-playing" a OFF y recargo Strimio, entonces el ajuste persiste.</li>
+<li><b>CA-4.2:</b> Cuando restauro valores por defecto, entonces el addon vuelve a comportamiento inicial sin reinstalar.</li>
+</ul>
+<h4>Definition of Done (transversal)</h4>
+<ul class="checks">
+<li>PR con descripción, tests nuevos que fallan sin el feature, CI verde (lint+unit+integration+build).</li>
+<li>Cobertura ≥ 80 % en módulos tocados; documentación de API interna actualizada.</li>
+<li>Paquete <code>.zip</code> reproducible generado por pipeline con checksum.</li>
+<li>Sin regresión en suite E2E de humo (instalar→buscar→reproducir→desinstalar).</li>
+</ul>
+
+<!-- ============================ 13. PRUEBAS ============================ -->
+<h2 id="pruebas">13. Estrategia de pruebas</h2>
+<table><tr><th>Nivel</th><th>Herramienta</th><th>Alcance</th><th>Gate</th></tr>
+<tr><td>Unitarias</td><td>Jest + jsdom + mocks de <code>HostContext</code></td><td>swal-bridge, normalización, cache TTL, cola de alertas, config-store</td><td>≥ 80 % cobertura; cada PR</td></tr>
+<tr><td>Contrato</td><td>Esquema JSON de manifest + type-check del ctx</td><td>Compatibilidad manifiesto/host</td><td>CI</td></tr>
+<tr><td>Integración</td><td>Stub del PluginManager (fixture) cargando <code>dist/main.js</code> real</td><td>init/destroy, registro provider, limpieza de listeners</td><td>CI</td></tr>
+<tr><td>E2E</td><td>Playwright sobre Strimio instalado (Win/mac/Linux)</td><td>Flujos H1–H4 completos</td><td>Nightly + pre-release</td></tr>
+<tr><td>Visual/regresión</td><td>Snapshots de modales (tema claro/oscuro)</td><td>Estética swal</td><td>PR con etiqueta UI</td></tr>
+<tr><td>Rendimiento</td><td>Script de bench (init, búsqueda, memoria)</td><td>RNF-01/02/03</td><td>Nightly</td></tr>
+<tr><td>Accesibilidad</td><td>axe-core en escenas de alerta</td><td>RNF-07</td><td>Release</td></tr>
+<tr><td>Seguridad</td><td>npm audit + whitelist de dominios de red + CSP check</td><td>RNF-05/11</td><td>CI</td></tr>
+</table>
+
+<!-- ============================ 14. MÉTRICAS ============================ -->
+<h2 id="metricas">14. Métricas y KPIs del proyecto</h2>
+<div class="grid2">
+<div class="card"><b>Ingeniería</b><ul>
+<li>Cobertura de tests: objetivo ≥ 80 % (línea) / ≥ 75 % (rama).</li>
+<li>Tiempo de CI: &lt; 6 min; tasa de pipelines verdes ≥ 90 %.</li>
+<li>Lead time de issue→PR merged: &lt; 3 días laborables.</li>
+<li>Deuda: 0 TODO sin issue asociado; mutaciones de ctx prohibidas fuera de <code>host-api</code>.</li>
+</ul></div>
+<div class="card"><b>Producto</b><ul>
+<li>Tasa de activación post-instalación ≥ 70 %.</li>
+<li>Búsquedas/semana por usuario activo ≥ 3.</li>
+<li>Crash-rate atribuible al addon ≈ 0 (reportes de log del host).</li>
+<li>NPS/valoración en market ≥ 4,2 / 5.</li>
+<li>Tiempo hasta primera reproducción desde instalación &lt; 60 s.</li>
+</ul></div>
+</div>
+
+<!-- ============================ 15. RIESGOS ============================ -->
+<h2 id="riesgos">15. Registro de riesgos</h2>
+<table><tr><th>ID</th><th>Riesgo</th><th>P</th><th>I</th><th>Score</th><th>Mitigación</th></tr>
+<tr><td>R-01</td><td>API del host cambia/está insuficientemente documentada entre versiones</td><td>Alta</td><td>Alta</td><td class="prio-alta">9</td><td>Capa <code>host-api</code> aislada; pin de <code>engines.strimio</code>; suite de contrato; verificar docs oficiales en Fase 1 (tarea V-01)</td></tr>
+<tr><td>R-02</td><td>El loader del host no permite bundlear SweetAlert2 tal cual</td><td>Media</td><td>Alta</td><td class="prio-media">6</td><td>Spike S-01 en Fase 1; alternativa: overlay propio mínimo (plan B, +2 sprints)</td></tr>
+<tr><td>R-03</td><td>Proveedor libre (Jamendo/IA) limita API o cambia esquema</td><td>Media</td><td>Media</td><td class="prio-media">4</td><td>Adaptadores múltiples detrás de interfaz <code>CatalogProvider</code>; fixtures</td></tr>
+<tr><td>R-04</td><td>Conflicto de estilos con el tema del host</td><td>Media</td><td>Baja</td><td class="prio-baja">2</td><td>Namespacing CSS + variables de tema; snapshots visuales</td></tr>
+<tr><td>R-05</td><td>Fugas de memoria por listeners no retirados</td><td>Media</td><td>Alta</td><td class="prio-media">6</td><td>Registry central de subscriptions + leak-check en integración</td></tr>
+<tr><td>R-06</td><td>Rechazo en revisión del market (permisos excesivos)</td><td>Baja</td><td>Media</td><td class="prio-baja">3</td><td>Manifiesto de mínimo privilegio; README de justificación de permisos</td></tr>
+</table>
+
+<!-- ============================ 16. ESTIMACIÓN ============================ -->
+<h2 id="estimacion">16. Estimación preliminar (entrada del roadmap)</h2>
+<p class="sub">Unidades: sprint = 1 semana, equipo 1–2 devs. Estimación en puntos de historia (Fibonacci) y calendario; se refinará en la planificación del roadmap.</p>
+<table><tr><th>Fase</th><th>Contenido</th><th>Sprints</th><th>Puntos</th><th>Hitos</th></tr>
+<tr><td>F0 · Análisis</td><td>Este reporte</td><td>1 (hecho)</td><td>3</td><td>✔ Reporte HTML entregado</td></tr>
+<tr><td>F1 · Preparación &amp; spikes</td><td>Verificar docs oficiales (V-01), entorno dev con Strimio, spike S-01 (carga mínima de addon hello-world en el host), scaffold TS/esbuild/Jest, CI base</td><td>2</td><td>8</td><td>Addon hello-world cargando en Strimio</td></tr>
+<tr><td>F2 · Núcleo alerts</td><td>swal-bridge + cola + temas + settings persist + tests unit</td><td>3</td><td>13</td><td>MVP alertas usable</td></tr>
+<tr><td>F3 · Provider</td><td>Cliente API, normalización, caché, panel lateral, playback delegado</td><td>4</td><td>21</td><td>E2E buscar→reproducir verde</td></tr>
+<tr><td>F4 · Calidad &amp; empaque</td><td>a11y, perf, i18n, ficha de market, paquete zip, docs, beta testing</td><td>2</td><td>8</td><td>v1.0.0 publicado (beta)</td></tr>
+<tr><td>F5 · Estabilización</td><td>Fixes de beta, migraciones, release notes, publicación definitiva</td><td>2</td><td>5</td><td>v1.0.0 stable</td></tr>
+<tr><td colspan="2"><b>Total</b></td><td><b>~14 semanas</b></td><td><b>58 pts</b></td><td colspan="2">Buffer recomendado +20 % ⇒ ventana realista 16–17 semanas</td></tr>
+</table>
+
+<!-- ============================ 17. SIGUIENTE PASO ============================ -->
+<h2 id="siguiente">17. Próximo paso: contenido del Roadmap (Fase 1)</h2>
+<p>Con este análisis cerrado, el documento roadmap registrará: desglose WBS por fase con tareas atómicas y dueños, diagramas adicionales (despliegue, secuencia de actualización), backlog priorizado con historias de usuario completas, plan de pruebas detallado por sprint, plan de release y métricas de seguimiento. Entregable sugerido: <code>docs/roadmap.md</code> + <code>docs/roadmap.html</code>.</p>
+
+<!-- ============================ ANEXOS ============================ -->
+<h2 id="anexos">18. Anexos</h2>
+<h3>A · Manifiesto propuesto (borrador)</h3>
+<pre>{
+  "id": "com.ejemplo.swal-provider",
+  "name": "SweetAlert Provider Bridge",
+  "version": "0.1.0",
+  "apiVersion": "^1.0",
+  "type": "provider",
+  "main": "dist/main.js",
+  "description": "Alertas elegantes SweetAlert2 + proveedor de catálogo libre para Strimio",
+  "author": "Equipo strimio-addon",
+  "icon": "assets/icon.png",
+  "permissions": ["ui.alerts", "player.read", "player.control", "storage.addon", "net.jamendo.com"],
+  "engines": { "strimio": ">=3.0.0" }
+}</pre>
+<h3>B · Interfaz mínima del contexto del host (asumida — confirmar en F1)</h3>
+<pre>interface HostContext {
+  registerProvider(p: MusicProvider): Unsubscribe;
+  onPlayerEvent(ev: 'play'|'pause'|'trackChange', cb: Function): Unsubscribe;
+  showAlert(opts: AlertOptions): Promise&lt;boolean&gt;;   // envuelta por swal-bridge
+  storage: { get(k: string): any; set(k: string, v: any): void };
+  theme: { current: 'light'|'dark'; onChange(cb): Unsubscribe };
+  logger: Logger;
+}</pre>
+<h3>C · Glosario</h3>
+<table><tr><th>Término</th><th>Definición</th></tr>
+<tr><td>Addon / Plugin</td><td>Módulo JS instalable que extiende Strimio vía manifest + main.js.</td></tr>
+<tr><td>PluginManager</td><td>Servicio del host que valida, carga, activa y descarga addons.</td></tr>
+<tr><td>ctx (HostContext)</td><td>Objeto de API inyectado al addon con permisos otorgados.</td></tr>
+<tr><td>Provider</td><td>Addon que aporta catálogo/reproducción de una fuente musical.</td></tr>
+<tr><td>MoSCoW</td><td>Priorización Must/Should/Could/Won't.</td></tr>
+</table>
+
+</div>
+<footer>
+  Reporte de Análisis Técnico · Proyecto Addon Strimio · v1.0 — 13/11/2026 · Generado como insumo de la Fase 0 para el Roadmap.
+</footer>
+</body>
+</html>

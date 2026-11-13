@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Roadmap — Addon Strimio «SweetAlert Provider Bridge»</title>
+<style>
+:root { --bg:#0f172a; --panel:#1e293b; --txt:#e2e8f0; --mut:#94a3b8; --acc:#818cf8; --acc2:#5eead4; --line:#334155; }
+* { box-sizing:border-box; }
+body { margin:0; font-family:'Segoe UI',system-ui,sans-serif; background:var(--bg); color:var(--txt); line-height:1.6; }
+.layout { display:flex; max-width:1400px; margin:0 auto; }
+nav.toc { position:sticky; top:0; height:100vh; overflow-y:auto; width:280px; flex-shrink:0; padding:2rem 1rem; border-right:1px solid var(--line); }
+nav.toc h3 { color:var(--acc2); font-size:.85rem; text-transform:uppercase; letter-spacing:.08em; }
+nav.toc a { display:block; color:var(--mut); text-decoration:none; font-size:.85rem; padding:.35rem .6rem; border-radius:6px; }
+nav.toc a:hover { background:var(--panel); color:var(--txt); }
+main { flex:1; min-width:0; padding:2.5rem 3rem; }
+h1 { color:#fff; font-size:1.9rem; border-bottom:3px solid var(--acc); padding-bottom:.6rem; }
+h2 { color:var(--acc); margin-top:2.4rem; border-bottom:1px solid var(--line); padding-bottom:.35rem; }
+h3 { color:var(--acc2); margin-top:1.6rem; }
+h4 { color:var(--txt); }
+p, li { color:var(--txt); font-size:.95rem; }
+code { background:var(--panel); color:var(--acc2); padding:.12rem .4rem; border-radius:4px; font-size:.85em; }
+pre { background:#0b1120; border:1px solid var(--line); border-radius:10px; padding:1rem 1.2rem; overflow-x:auto; font-size:.82rem; line-height:1.45; }
+table { border-collapse:collapse; width:100%; margin:1rem 0; font-size:.85rem; }
+th { background:var(--panel); color:var(--acc2); text-align:left; }
+th, td { border:1px solid var(--line); padding:.45rem .6rem; vertical-align:top; }
+tr:nth-child(even) td { background:#141d31; }
+blockquote { background:var(--panel); border-left:4px solid var(--acc); margin:1rem 0; padding:.7rem 1rem; border-radius:0 8px 8px 0; color:var(--mut); }
+hr { border:none; border-top:1px solid var(--line); margin:2.2rem 0; }
+a { color:var(--acc); }
+b { color:#fff; }
+@media (max-width:900px) { nav.toc { display:none; } main { padding:1.2rem; } }
+@media print { body { background:#fff; color:#111; } pre, table, blockquote { white-space:pre-wrap; } nav.toc { display:none; } }
+</style>
+</head>
+<body>
+<div class="layout">
+<nav class="toc"><h3>Contenido</h3><a href="#índice">Índice</a>
+<a href="#1-visión-objetivo-y-alcance">1. Visión, objetivo y alcance</a>
+<a href="#2-resumen-ejecutivo-del-plan">2. Resumen ejecutivo del plan</a>
+<a href="#3-arquitectura">3. Arquitectura</a>
+<a href="#4-estructura-de-carpetas">4. Estructura de carpetas</a>
+<a href="#5-dependencias">5. Dependencias</a>
+<a href="#6-módulos">6. Módulos</a>
+<a href="#7-diagramas">7. Diagramas</a>
+<a href="#8-backlog-priorizado-historias-de-usuario">8. Backlog priorizado (historias de usuario)</a>
+<a href="#9-desglose-wbs-por-fases-y-tareas">9. Desglose WBS por fases y tareas</a>
+<a href="#10-cronograma-y-hitos">10. Cronograma y hitos</a>
+<a href="#11-estimación">11. Estimación</a>
+<a href="#12-plan-de-pruebas">12. Plan de pruebas</a>
+<a href="#13-criterios-de-aceptación-y-dod">13. Criterios de aceptación y DoD</a>
+<a href="#14-métricas-y-kpis">14. Métricas y KPIs</a>
+<a href="#15-riesgos-y-mitigación">15. Riesgos y mitigación</a>
+<a href="#16-plan-de-releases">16. Plan de releases</a>
+<a href="#17-proceso-de-trabajo">17. Proceso de trabajo</a>
+<a href="#18-anexos">18. Anexos</a>
+<a href="#historial-de-cambios">Historial de cambios</a></nav>
+<main>
+<h1 id="roadmap-addon-strimio-sweetalert-provider-bridge">🗺️ Roadmap — Addon Strimio «SweetAlert Provider Bridge»</h1>
+<blockquote><b>Versión:</b> 1.0 · <b>Fecha:</b> 2026-11-13 · <b>Estado:</b> Aprobado para ejecución</blockquote>
+<blockquote><b>Documento base:</b> <a href="./reporte-analisis-tecnico.html"><code>reporte-analisis-tecnico.html</code></a> (Fase 0 — análisis de stack, tipos, requisitos, criterios de aceptación y lenguaje)</blockquote>
+<blockquote><b>Proyecto:</b> Addon para <a href="https://www.strimio.com/">Strimio</a> (desktop music player, Electron + React + Redux). Tipo híbrido <b>Provider (A) + Tool/UI (C)</b>: registra un proveedor de catálogo libre (Jamendo / Internet Archive) y aporta un bridge de alertas con SweetAlert2.</blockquote>
+<hr>
+<h2 id="índice">Índice</h2>
+<ol style="padding-left:1.4em">
+<li><a href="#1-visión-objetivo-y-alcance">Visión, objetivo y alcance</a></li>
+<li><a href="#2-resumen-ejecutivo-del-plan">Resumen ejecutivo del plan</a></li>
+<li><a href="#3-arquitectura">Arquitectura</a></li>
+<li><a href="#4-estructura-de-carpetas">Estructura de carpetas</a></li>
+<li><a href="#5-dependencias">Dependencias</a></li>
+<li><a href="#6-módulos">Módulos</a></li>
+<li><a href="#7-diagramas">Diagramas</a></li>
+<li><a href="#8-backlog-priorizado-historias-de-usuario">Backlog priorizado (historias de usuario)</a></li>
+<li><a href="#9-desglose-wbs-por-fases-y-tareas">Desglose WBS por fases y tareas</a></li>
+<li><a href="#10-cronograma-y-hitos">Cronograma y hitos</a></li>
+<li><a href="#11-estimación">Estimación</a></li>
+<li><a href="#12-plan-de-pruebas">Plan de pruebas</a></li>
+<li><a href="#13-criterios-de-aceptación-y-dod">Criterios de aceptación y DoD</a></li>
+<li><a href="#14-métricas-y-kpis">Métricas y KPIs</a></li>
+<li><a href="#15-riesgos-y-mitigación">Riesgos y mitigación</a></li>
+<li><a href="#16-plan-de-releases">Plan de releases</a></li>
+<li><a href="#17-proceso-de-trabajo">Proceso de trabajo</a></li>
+<li><a href="#18-anexos">Anexos</a></li>
+</ul>
+<hr>
+<h2 id="1-visión-objetivo-y-alcance">1. Visión, objetivo y alcance</h2>
+<h3 id="visión">Visión</h3>
+<p>Mejorar la experiencia de notificaciones y descubrimiento musical en Strimio: alertas/modales elegantes y accesibles (SweetAlert2) integradas con el tema del host, más un proveedor de música de catálogo libre que se integra al pipeline de playback nativo — sin tocar el código de Strimio, usando únicamente su API pública de addons.</p>
+<h3 id="objetivo-del-proyecto-smart">Objetivo del proyecto (SMART)</h3>
+<p>Entregar <b>v1.0.0 estable</b> publicada en el market de Strimio en <b>≤ 17 semanas</b>, con cobertura de tests ≥ 80 %, bundle ≤ 300 KB gzip, tasa de crash atribuible al addon ≈ 0 y ≥ 20 usuarios beta activos.</p>
+<h3 id="dentro-del-alcance-v10">Dentro del alcance (v1.0)</h3>
+<ul>
+<li>Bridge de alertas: <code>notify()</code>, <code>confirm()</code>, <code>error()</code>, <code>nowPlaying()</code> con cola, temas claro/oscuro e i18n es/en.</li>
+<li>Proveedor único activo: <b>Jamendo</b> (adaptador secundario <b>Internet Archive</b> como feature flag "experimental").</li>
+<li>Panel lateral de búsqueda con paginación, caché TTL 15 min y reproducción delegada al host.</li>
+<li>Configuración persistente, modo seguro por permisos, desinstalación limpia, CI/CD, ficha de market.</li>
+</ul>
+<h3 id="fuera-del-alcance-v1x-futuro">Fuera del alcance (v1.x futuro)</h3>
+<ul>
+<li>Soporte de más de un provider simultáneo, playlists sincronizadas, letras, escrobbler, portales web del addon, distribución fuera del market oficial.</li>
+</ul>
+<h3 id="supuestos-críticos-heredados-del-informe-f0">Supuestos críticos (heredados del informe F0)</h3>
+<ul>
+<li><b>S-1:</b> El contrato del host (<code>init(ctx)/destroy()</code>, <code>registerProvider</code>, hooks) sigue los patrones documentados; <b>la tarea V-01 lo verifica contra <code>docs.strimio.com</code> y el repo <code>Strimio/docs</code> antes de congelar interfaces</b>. Si cambia, el impacto se absorbe en la capa <code>host-api</code> (coste estimado: +1 sprint).</li>
+<li><b>S-2:</b> El loader permite bundlear dependencias propias (SweetAlert2). Verificado en spike S-01; plan B documentado en R-02.</li>
+</ul>
+<hr>
+<h2 id="2-resumen-ejecutivo-del-plan">2. Resumen ejecutivo del plan</h2>
+<table>
+<tr><th>Fase</th><th>Nombre</th><th>Sprint</th><th>Duración</th><th>Puntos</th><th>Hito de salida</th></tr>
+<tr><td>F0</td><td>Análisis técnico (informe HTML)</td><td>S0</td><td>1 sem</td><td>3 ✔</td><td>Reporte entregado ✅</td></tr>
+<tr><td>F1</td><td>Preparación &amp; spikes</td><td>S1–S2</td><td>2 sem</td><td>8</td><td>Hello-world cargando en Strimio + CI verde</td></tr>
+<tr><td>F2</td><td>Núcleo de alertas (MVP)</td><td>S3–S5</td><td>3 sem</td><td>13</td><td>MVP alertas usable + demo CA-2.x</td></tr>
+<tr><td>F3</td><td>Provider de música</td><td>S6–S9</td><td>4 sem</td><td>21</td><td>E2E buscar→reproducir verde</td></tr>
+<tr><td>F4</td><td>Calidad &amp; empaque</td><td>S10–S11</td><td>2 sem</td><td>8</td><td>v0.9.0 beta publicado</td></tr>
+<tr><td>F5</td><td>Estabilización &amp; release</td><td>S12–S13</td><td>2 sem</td><td>5</td><td><b>v1.0.0 stable</b> en market</td></tr>
+<tr><td></td><td><b>Total</b></td><td><b>13+1</b></td><td><b>14 sem</b></td><td><b>58</b></td><td>Buffer +20 % ⇒ <b>ventana realista 16–17 sem</b></td></tr>
+</table>
+<p><b>Ruta crítica:</b> V-01 → S-01 → scaffold → swal-bridge → provider-client → panel UI → E2E → beta → release. Cualquier retraso en V-01/S-01 desplaza todo el proyecto: se atacan primero.</p>
+<hr>
+<h2 id="3-arquitectura">3. Arquitectura</h2>
+<h3 id="31-principios">3.1 Principios</h3>
+<ol style="padding-left:1.4em">
+<li><b>Adapter defensivo:</b> solo <code>src/host-api/</code> toca el contexto del host; todo lo interno habla contra interfaces propias (<code>HostApi</code>). Si el host cambia, se adapta una sola capa.</li>
+<li><b>Boundary try/catch:</b> ninguna excepción del addon se propaga a Strimio (RNF-04). Toda API pública envuelve ejecuciones y enruta errores a logger + alerta.</li>
+<li><b>Mínimo privilegio:</b> permisos declarados = permisos usados; sin <code>eval</code>, URLs https-only, sanitización de HTML externo.</li>
+<li><b>Degradaación elegante:</b> sin permiso de provider → el addon funciona solo como bridge de alertas (RF-15).</li>
+<li><b>Autocontención:</b> bundle CJS único (<code>dist/main.js</code>) con CSS inyectado namespaced <code>.swal-provider-*</code>; cero dependencias del runtime del host.</li>
+</ul>
+<h3 id="32-componentes">3.2 Componentes</h3>
+<table>
+<tr><th>#</th><th>Componente</th><th>Responsabilidad</th><th>Requisitos cubiertos</th></tr>
+<tr><td>C1</td><td><code>manifest.json</code></td><td>Identidad, permisos, engines, icon</td><td>RF-02</td></tr>
+<tr><td>C2</td><td><code>core/lifecycle</code></td><td>Orquestación init/destroy, registro de subscriptions</td><td>RF-01, RF-17, RNF-03</td></tr>
+<tr><td>C3</td><td><code>host-api</code></td><td>Adapter del ctx del host (capabilities, hooks, playback)</td><td>RF-01, R-01</td></tr>
+<tr><td>C4</td><td><code>alerts/swal-bridge</code></td><td>API notify/confirm/error/nowPlaying sobre SweetAlert2</td><td>RF-03</td></tr>
+<tr><td>C5</td><td><code>alerts/queue</code></td><td>Serialización de modales (máx 1), toasts apilados (máx 3)</td><td>RF-11, CA-2.4</td></tr>
+<tr><td>C6</td><td><code>alerts/themes</code></td><td>Tema claro/oscuro desde el host, variables CSS</td><td>RF-12, CA-2.3</td></tr>
+<tr><td>C7</td><td><code>core/config-store</code></td><td>Settings persistentes + migraciones</td><td>RF-08, RF-18, CA-4.x</td></tr>
+<tr><td>C8</td><td><code>provider/jamendo-client</code></td><td>Llamadas a API Jamendo (search, pagination)</td><td>RF-04, RF-05</td></tr>
+<tr><td>C9</td><td><code>provider/archive-client</code></td><td>Adaptador Internet Archive (feature flag)</td><td>R-03</td></tr>
+<tr><td>C10</td><td><code>provider/normalize</code></td><td>Mapeo a modelo canónico <code>Track</code></td><td>RF-05, RF-06</td></tr>
+<tr><td>C11</td><td><code>provider/cache</code></td><td>TTL 15 min resultados + portadas</td><td>RF-10, CA-3.3</td></tr>
+<tr><td>C12</td><td><code>ui/sidebar-panel</code></td><td>Panel de búsqueda/lista/paginación ▶</td><td>RF-04..06, CA-3.x</td></tr>
+<tr><td>C13</td><td><code>ui/settings-view</code></td><td>Formulario de configuración</td><td>RF-08</td></tr>
+<tr><td>C14</td><td><code>core/logger</code></td><td>Log estructurado en userData/addons/&lt;id&gt;/logs</td><td>RF-16</td></tr>
+<tr><td>C15</td><td><code>core/errors</code></td><td>Taxonomía de errores → plantillas de alerta</td><td>RF-07</td></tr>
+<tr><td>C16</td><td><code>i18n</code></td><td>Diccionarios es/en + detección idioma host</td><td>RF-13</td></tr>
+</table>
+<h3 id="33-decisiones-registradas-adr-resumidos">3.3 Decisiones registradas (ADR resumidos)</h3>
+<table>
+<tr><th>ID</th><th>Decisión</th><th>Alternativas descartadas</th><th>Justificación</th></tr>
+<tr><td>ADR-1</td><td>TypeScript estricto (ES2020/CJS)</td><td>JS plano, compile-to-JS ligero</td><td>Tipos compartidos host/addon, seguridad de refactor, requisito RNF-09</td></tr>
+<tr><td>ADR-2</td><td>esbuild como bundler</td><td>webpack, rollup</td><td>Velocidad (&lt;2 s), output CJS único, tree-shaking de SweetAlert2</td></tr>
+<tr><td>ADR-3</td><td>SweetAlert2 bundled (no CDN)</td><td>overlay propio, notificaciones nativas Electron</td><td>Madurez/a11y del proyecto, offline-safe, CSP-compatible</td></tr>
+<tr><td>ADR-4</td><td>Un solo adaptador <code>CatalogProvider</code> activo con registry</td><td>providers múltiples</td><td>Complejidad mínima viable; extensible post-v1</td></tr>
+<tr><td>ADR-5</td><td>Playback delegado al host (nunca <code>&lt;audio&gt;</code> propio)</td><td>reproductor embebido</td><td>Coherencia de UX, menos memoria, respeta media keys del host</td></tr>
+<tr><td>ADR-6</td><td>Jest+jsdom unit/integration; Playwright E2E</td><td>Cypress</td><td>jsdom rápido para lógica; Playwright soporta Electron/apps desktop multi-OS</td></tr>
+</table>
+<hr>
+<h2 id="4-estructura-de-carpetas">4. Estructura de carpetas</h2>
+<pre>strimio-addon/
+├── manifest.json              # id, version, apiVersion, type, permissions, engines  [Tarea T1.2]
+├── package.json               # scripts dev/build/test/package
+├── tsconfig.json              # strict:true, target ES2020, module CommonJS
+├── esbuild.config.mjs         # bundle CJS -&gt; dist/main.js (+ css inyectado)
+├── jest.config.ts             # preset jsdom, setup mocks de HostContext
+├── playwright.config.ts       # E2E sobre Strimio instalado
+├── .github/workflows/ci.yml   # lint -&gt; type-check -&gt; test -&gt; build -&gt; audit -&gt; package zip
+├── .github/workflows/release.yml
+├── src/
+│   ├── main.ts                # export { init, destroy } — composición de módulos
+│   ├── types/                 # host-context.d.ts · track.model.ts · settings.ts
+│   ├── core/                  # lifecycle.ts · config-store.ts · logger.ts · errors.ts · subscription-registry.ts
+│   ├── host-api/              # adapter.ts · capabilities.ts · contract-tests
+│   ├── alerts/                # swal-bridge.ts · templates.ts · queue.ts · themes.css
+│   ├── provider/              # jamendo-client.ts · archive-client.ts · normalize.ts · cache.ts · catalog.interface.ts
+│   ├── ui/                    # sidebar-panel.ts · settings-view.ts · dom-helpers.ts
+│   └── i18n/                  # index.ts · locales/es.json · locales/en.json
+├── assets/                    # icon.png (256px) · preview-market.png · screenshots/
+├── tests/
+│   ├── unit/                  # *.test.ts por módulo
+│   ├── integration/           # stub PluginManager carga dist/main.js real
+│   ├── fixtures/              # respuestas API grabadas (Jamendo/IA)
+│   └── e2e/                   # flujos H1–H4 (instalar→buscar→reproducir→alertar→desinstalar)
+├── docs/                      # este roadmap · README · API interna · CONTRIBUTING · CHANGELOG
+└── scripts/                   # bench.mjs · leak-check.mjs · validate-manifest.mjs</pre>
+<hr>
+<h2 id="5-dependencias">5. Dependencias</h2>
+<h3 id="51-runtime-dependencies">5.1 Runtime (<code>dependencies</code>)</h3>
+<table>
+<tr><th>Paquete</th><th>Versión</th><th>Uso</th><th>Impacto bundle (gzip aprox.)</th></tr>
+<tr><td>sweetalert2</td><td>^11.x</td><td>Modales/toasts accesibles</td><td>~90 KB</td></tr>
+</table>
+<p><i>(Objetivo RNF-02: total ≤ 300 KB gzip; presupuesto: swal 90 + código addon 60 + CSS 15 + colchón).</i></p>
+<h3 id="52-desarrollo-devdependencies">5.2 Desarrollo (<code>devDependencies</code>)</h3>
+<table>
+<tr><th>Categoría</th><th>Paquete</th><th>Versión</th></tr>
+<tr><td>Lenguaje/build</td><td>typescript, esbuild</td><td>≥5.4 / ≥0.21</td></tr>
+<tr><td>Tests</td><td>jest, ts-jest, jest-environment-jsdom</td><td>≥29</td></tr>
+<tr><td>E2E</td><td>@playwright/test</td><td>≥1.44</td></tr>
+<tr><td>Calidad</td><td>eslint, @typescript-eslint/*, prettier</td><td>≥8 / ≥7</td></tr>
+<tr><td>Utilidades</td><td>rimraf, concurrently</td><td>latest</td></tr>
+<tr><td>Seguridad</td><td>npm audit (CI), sinon</td><td>—</td></tr>
+</table>
+<h3 id="53-externos-al-repositorio">5.3 Externos al repositorio</h3>
+<ul>
+<li>Strimio ≥ 3.0 (entorno de prueba local, no empaquetado).</li>
+<li>API Jamendo (client_id gratuito, límite de uso documentado) / Internet Archive (sin key).</li>
+<li>Node.js ≥ 20 LTS para toolchain.</li>
+</ul>
+<h3 id="54-política-de-dependencias">5.4 Política de dependencias</h3>
+<ul>
+<li>0 dependencias transitivas de red en runtime; <code>npm audit --audit-level=high</code> bloqueante en CI; Renovabe mensual agrupado; licencias solo MIT/Apache-2.0.</li>
+</ul>
+<hr>
+<h2 id="6-módulos">6. Módulos</h2>
+<p>Contratos internos (firmados al final de F1, congelados en gate G1):</p>
+<table>
+<tr><th>Módulo</th><th>API pública</th><th>Depende de</th><th>Cobertura mínima</th></tr>
+<tr><td><code>core/lifecycle</code></td><td><code>init(ctx): Promise&lt;void&gt;</code> · <code>destroy(): Promise&lt;void&gt;</code></td><td>host-api, config, alerts, provider, ui</td><td>85 %</td></tr>
+<tr><td><code>host-api</code></td><td><code>getCapabilities()</code>, <code>onTheme(cb)</code>, <code>onTrackChange(cb)</code>, <code>play(track)</code>, <code>storage.get/set</code>, <code>registerProvider(p)</code></td><td>ctx del host</td><td>90 % (contract tests)</td></tr>
+<tr><td><code>alerts/swal-bridge</code></td><td><code>notify(msg, opts)</code>, <code>confirm(opts): Promise&lt;boolean&gt;</code>, <code>error(err, {retry})</code>, <code>nowPlaying(track)</code></td><td>queue, themes, i18n, sweetalert2</td><td>85 %</td></tr>
+<tr><td><code>alerts/queue</code></td><td><code>push(job)</code> — serializa modales, apila toasts (máx 3)</td><td>—</td><td>90 %</td></tr>
+<tr><td><code>core/config-store</code></td><td><code>get&lt;K&gt;()</code>, <code>set&lt;K,v&gt;()</code>, <code>reset()</code>, <code>migrate(from,to)</code></td><td>host-api.storage</td><td>85 %</td></tr>
+<tr><td><code>provider/jamendo-client</code></td><td><code>search(q, page): Promise&lt;TrackPage&gt;</code></td><td>fetch, cache</td><td>80 % (fixtures)</td></tr>
+<tr><td><code>provider/normalize</code></td><td>`toTrack(raw): Track \</td><td>null`</td><td>types</td><td>95 %</td></tr>
+<tr><td><code>provider/cache</code></td><td><code>get/set(key, ttl=900s)</code></td><td>—</td><td>90 %</td></tr>
+<tr><td><code>ui/sidebar-panel</code></td><td><code>mount(root)</code>, <code>unmount()</code></td><td>provider, alerts, i18n</td><td>75 % (DOM)</td></tr>
+<tr><td><code>core/logger</code></td><td><code>debug/info/warn/error(meta)</code></td><td>host fs via ctx</td><td>80 %</td></tr>
+</table>
+<p><b>Regla de arquitectura verificable en CI:</b> importaciones permitidas solo hacia abajo (ui→provider/alerts→core→host-api); <code>eslint-plugin-import</code> + script <code>check-layers.mjs</code>.</p>
+<hr>
+<h2 id="7-diagramas">7. Diagramas</h2>
+<h3 id="71-contexto-c4-nivel-1">7.1 Contexto (C4 nivel 1)</h3>
+<pre>┌────────────────────────────── Strimio (Electron) ──────────────────────────────┐
+│  Renderer: PluginManager ──► carga addon ──► init(ctx)                          │
+│  Player/Playback ◄────────── host-api.play(track) ──────────┐                  │
+│  Theme/Events  ─────────────► onTheme/onTrackChange ────────┤                  │
+│                                                             ▼                  │
+│                              ┌────────────────────────────────────────┐        │
+│                              │  ADDON: SweetAlert Provider Bridge     │        │
+│                              │  alerts ⇄ provider ⇄ ui ⇄ core         │        │
+│                              └───────┬───────────────────┬────────────┘        │
+│                                      │ HTTPS             │ localStorage-like   │
+└──────────────────────────────────────┼───────────────────┼─────────────────────┘
+                                       ▼                   ▼
+                            api.jamendo.com        userData/addons/&lt;id&gt;/
+                            archive.org            (settings + logs)</pre>
+<h3 id="72-secuencia-de-carga-init">7.2 Secuencia de carga (init)</h3>
+<pre>sequenceDiagram
+    participant PM as PluginManager (host)
+    participant LC as core/lifecycle
+    participant HA as host-api (adapter)
+    participant CF as config-store
+    participant AL as swal-bridge
+    participant PR as provider registry
+    participant UI as sidebar-panel
+    PM-&gt;&gt;LC: init(ctx)
+    LC-&gt;&gt;HA: wrap(ctx) — detecta capabilities
+    HA--&gt;&gt;LC: caps {alerts, provider, storage}
+    LC-&gt;&gt;CF: load() + migrate()
+    LC-&gt;&gt;AL: init(theme from host)
+    alt caps.provider ok
+        LC-&gt;&gt;PR: registerProvider(jamendo)
+        LC-&gt;&gt;UI: mount(sidebar root)
+    else sin permiso
+        LC--&gt;&gt;PM: modo degradado (solo alertas) + log warn
+    end
+    LC--&gt;&gt;PM: resolve (&lt;150 ms)</pre>
+<h3 id="73-flujo-buscar-reproducir-con-error-handling">7.3 Flujo buscar → reproducir con error handling</h3>
+<pre>flowchart TD
+    A[Usuario escribe query] --&gt; B{cache TTL válido?}
+    B -- sí --&gt; E[render lista]
+    B -- no --&gt; C[jamendo.search q,page]
+    C -- éxito --&gt; D[normalize → Track[]] --&gt; F[cache.set] --&gt; E
+    C -- fallo red --&gt; G[alerts.error &#x27;sin conexión&#x27; + Reintentar]
+    G -. reintento .-&gt; C
+    E --&gt; H[click ▶]
+    H --&gt; I[host-api.play streamUrl]
+    I -- ok --&gt; J[hook trackChange → toast nowPlaying]
+    I -- err --&gt; K[alerts.error playback + Reintentar]</pre>
+<h3 id="74-máquina-de-estados-del-addon">7.4 Máquina de estados del addon</h3>
+<pre>INSTALLED ─activate→ LOADING ─init ok→ ACTIVE ⇄ (settings change) ACTIVE
+   │                    │fault              │deactivate→ DESTROYING → INSTALLED
+   │                    ▼                   ▼
+   └──────────── BLOCKED (apiVersion/permiso)   SAFE_MODE (provider sin permiso)</pre>
+<h3 id="75-despliegue-pipeline">7.5 Despliegue / pipeline</h3>
+<pre>PR → lint+type-check → unit+integration (jest) → build esbuild → size-check ≤300KB
+   → npm audit + domain-whitelist → package zip + checksum
+tag vX.Y.Z → release.yml → GitHub Release (zip) → sumisión manual market Strimio
+nightly → Playwright E2E (win/mac/linux) + bench + axe-core</pre>
+<hr>
+<h2 id="8-backlog-priorizado-historias-de-usuario">8. Backlog priorizado (historias de usuario)</h2>
+<p>Formato: <i>Como… quiero… para…</i> · Prioridad MoSCoW · Puntos (Fibonacci) · Fase.</p>
+<table>
+<tr><th>ID</th><th>Historia</th><th>Prioridad</th><th>PTS</th><th>Fase</th><th>CAs asociadas</th></tr>
+<tr><td>HU-01</td><td>Como usuario, quiero instalar y activar el addon sin reiniciar Strimio, para usarlo de inmediato.</td><td>Must</td><td>3</td><td>F1</td><td>CA-1.1, CA-1.2</td></tr>
+<tr><td>HU-02</td><td>Como usuario, quiero ver alertas estilizadas ante errores de playback con botón "Reintentar".</td><td>Must</td><td>5</td><td>F2</td><td>CA-2.1</td></tr>
+<tr><td>HU-03</td><td>Como usuario, quiero diálogos de confirmación consistentes (Esc/click-fuera configurables).</td><td>Must</td><td>3</td><td>F2</td><td>CA-2.2</td></tr>
+<tr><td>HU-04</td><td>Como usuario, quiero que las alertas respeten el tema claro/oscuro del host.</td><td>Should</td><td>3</td><td>F2</td><td>CA-2.3</td></tr>
+<tr><td>HU-05</td><td>Como usuario, quiero que los toasts se apilen máximo 3 y los modales nunca se superpongan.</td><td>Should</td><td>2</td><td>F2</td><td>CA-2.4</td></tr>
+<tr><td>HU-06</td><td>Como oyente, quiero buscar música libre desde la barra lateral y ver título/artista/portada en &lt;2 s.</td><td>Must</td><td>8</td><td>F3</td><td>CA-3.1</td></tr>
+<tr><td>HU-07</td><td>Como oyente, quiero pulsar ▶ y que Strimio reproduzca la pista con metadatos correctos.</td><td>Must</td><td>5</td><td>F3</td><td>CA-3.2</td></tr>
+<tr><td>HU-08</td><td>Como usuario offline, quiero saber que no hay conexión y poder navegar la última caché.</td><td>Must</td><td>3</td><td>F3</td><td>CA-3.3</td></tr>
+<tr><td>HU-09</td><td>Como usuario, quiero paginar resultados de 20 en 20 sin duplicados.</td><td>Must</td><td>3</td><td>F3</td><td>CA-3.4</td></tr>
+<tr><td>HU-10</td><td>Como usuario, quiero configurar tema, toasts on/off y límite de resultados, y que persista.</td><td>Should</td><td>3</td><td>F2/F3</td><td>CA-4.1</td></tr>
+<tr><td>HU-11</td><td>Como usuario, quiero restaurar valores por defecto sin reinstalar.</td><td>Should</td><td>1</td><td>F2</td><td>CA-4.2</td></tr>
+<tr><td>HU-12</td><td>Como usuario, quiero un toast "now playing" al cambiar de pista (opt-in).</td><td>Should</td><td>2</td><td>F2</td><td>RF-09</td></tr>
+<tr><td>HU-13</td><td>Como usuario, quiero textos en español/inglés según el idioma del host.</td><td>Could</td><td>2</td><td>F4</td><td>RF-13</td></tr>
+<tr><td>HU-14</td><td>Como power-user, quiero Ctrl+Shift+J para búsqueda rápida.</td><td>Could</td><td>2</td><td>F4</td><td>RF-14</td></tr>
+<tr><td>HU-15</td><td>Como maintainer, quiero desinstalación limpia sin listeners huérfanos.</td><td>Must</td><td>3</td><td>F2</td><td>CA-1.3, RNF-03</td></tr>
+<tr><td>HU-16</td><td>Como revisor del market, quiero permisos mínimos justificados y paquete reproducible.</td><td>Must</td><td>3</td><td>F4</td><td>RNF-05/11, DoD</td></tr>
+</table>
+<p><b>Orden de planificación:</b> HU-01 → HU-02/03 → HU-15 → HU-04/05/10/11/12 → HU-06..09 → HU-13/14/16.</p>
+<hr>
+<h2 id="9-desglose-wbs-por-fases-y-tareas">9. Desglose WBS por fases y tareas</h2>
+<p>Convenciones: ID <code>T&lt;fase&gt;.&lt;número&gt;</code> · tamaño S/M/L (≤½ día / 1–2 días / 3–5 días) · cada tarea tiene Definition of Done particular y referencia a RF/RNF/CA.</p>
+<h3 id="fase-1-preparación-spikes-s1s2-8-pts">FASE 1 — Preparación &amp; spikes (S1–S2, 8 pts)</h3>
+<table>
+<tr><th>ID</th><th>Tarea</th><th>Tamaño</th><th>Deps</th><th>Owner</th><th>Criterio de salida</th></tr>
+<tr><td>T1.1</td><td><b>V-01</b>: Verificar docs oficiales Strimio (<code>docs.strimio.com</code>, repo <code>Strimio/docs</code>): manifiesto, ciclo de vida, API provider, hooks, permisos. Producir <code>docs/host-contract.md</code> con ejemplos reales.</td><td>M</td><td>—</td><td>Dev lead</td><td>Contrato documentado con citas; desambigua SUPUESTOS F0 (R-01)</td></tr>
+<tr><td>T1.2</td><td>Scaffold repo: TS estricto, esbuild, ESLint/Prettier, layering-rule, <code>manifest.json</code> inicial, validador <code>scripts/validate-manifest.mjs</code>.</td><td>M</td><td>T1.1</td><td>Dev</td><td><code>npm run build</code> genera <code>dist/main.js</code>; schema-check pasa (RF-02)</td></tr>
+<tr><td>T1.3</td><td><b>S-01 spike</b>: addon hello-world mínimo cargado en Strimio local: <code>init/destroy</code> ejecutados, log visible, primer modal nativo renderizado. Documentar hallazgos (¿SweetAlert2 bundleable? R-02).</td><td>L</td><td>T1.2</td><td>Dev</td><td>Demo grabada + decisión ADR-3 confirmada o plan B activado</td></tr>
+<tr><td>T1.4</td><td>CI base: lint → type-check → test → build → artifact zip; badge de estado.</td><td>S</td><td>T1.2</td><td>Dev</td><td>Pipeline verde en rama <code>main</code></td></tr>
+<tr><td>T1.5</td><td>Stub del PluginManager para integración (<code>tests/integration/host-stub.ts</code>) + mock <code>HostContext</code> para Jest.</td><td>M</td><td>T1.1</td><td>Dev</td><td><code>init(ctxStub)</code> testeable sin Strimio real</td></tr>
+<tr><td>T1.6</td><td>Entorno E2E: script que instala Strimio en runner + perfil de prueba; smoke test "addon aparece en Mis addons".</td><td>M</td><td>T1.3</td><td>Dev</td><td>Playwright corre humo en 1 OS</td></tr>
+<tr><td>T1.7</td><td>Congelar contratos de módulos §6 (tipos <code>Track</code>, <code>HostApi</code>, <code>CatalogProvider</code>) en <code>src/types/</code>.</td><td>S</td><td>T1.1</td><td>Todos</td><td>Type-check cruzado OK; gate <b>G1</b></td></tr>
+</table>
+<p><b>Gate G1 (fin F1):</b> hello-world activo en host real + contrato verificado + CI verde. <i>Sin G1 no se inicia F2.</i></p>
+<h3 id="fase-2-núcleo-de-alertas-mvp-s3s5-13-pts">FASE 2 — Núcleo de alertas MVP (S3–S5, 13 pts)</h3>
+<table>
+<tr><th>ID</th><th>Tarea</th><th>Tamaño</th><th>Deps</th><th>Owner</th><th>Criterio de salida</th></tr>
+<tr><td>T2.1</td><td><code>swal-bridge</code>: wrappers <code>notify/confirm/error/nowPlaying</code> + boundary try/catch global.</td><td>L</td><td>T1.7</td><td>Dev A</td><td>Unit ≥85 %; CA-2.1/2.2 verdes en jsdom</td></tr>
+<tr><td>T2.2</td><td><code>alerts/queue</code>: serializador de modales + pila de toasts máx 3 FIFO.</td><td>M</td><td>T2.1</td><td>Dev A</td><td>CA-2.4; unit 90 %</td></tr>
+<tr><td>T2.3</td><td><code>themes</code>: lectura de tema del host vía host-api, variables CSS namespaced, snapshot visual claro/oscuro.</td><td>M</td><td>T2.1</td><td>Dev B</td><td>CA-2.3; storybook-less gallery PNG en CI</td></tr>
+<tr><td>T2.4</td><td><code>config-store</code> + migraciones + <code>settings-view</code> (tema, toasts on/off, límite resultados, reset).</td><td>L</td><td>T1.7</td><td>Dev B</td><td>CA-4.1/4.2; persistencia tras reload</td></tr>
+<tr><td>T2.5</td><td>Hook <code>trackChange</code> → toast "now playing" opt-in.</td><td>S</td><td>T2.1,T2.4</td><td>Dev A</td><td>RF-09; integration test</td></tr>
+<tr><td>T2.6</td><td><code>subscription-registry</code> + leak-check ×10 ciclos cargar/descargar.</td><td>M</td><td>T2.1</td><td>Dev A</td><td>CA-1.3, RNF-03 Δheap&lt;2MB</td></tr>
+<tr><td>T2.7</td><td><code>errors</code> taxonomy → plantillas de alerta con acción retry; integración con evento de error de playback del host.</td><td>M</td><td>T2.1</td><td>Dev B</td><td>RF-07; fault injection tests</td></tr>
+<tr><td>T2.8</td><td>Suite unit + integration de la fase; cobertura global ≥80 %.</td><td>M</td><td>T2.1–T2.7</td><td>QA/dev</td><td>Gate <b>G2</b>: demo MVP alertas con CAs H2 completas</td></tr>
+</table>
+<p><b>Gate G2 (fin F2):</b> MVP alertas usable en host real; suite H2 verde; cobertura ≥80 %.</p>
+<h3 id="fase-3-provider-de-música-s6s9-21-pts">FASE 3 — Provider de música (S6–S9, 21 pts)</h3>
+<table>
+<tr><th>ID</th><th>Tarea</th><th>Tamaño</th><th>Deps</th><th>Owner</th><th>Criterio de salida</th></tr>
+<tr><td>T3.1</td><td>Registro de API Jamendo (client_id), exploración endpoints, fixtures de respuestas en <code>tests/fixtures/</code>.</td><td>S</td><td>G1</td><td>Dev B</td><td>200 OK reproducibles; límites de rate documentados</td></tr>
+<tr><td>T3.2</td><td><code>jamendo-client</code>: search con paginación 20/página, timeouts, cancelación de requests obsoletas.</td><td>L</td><td>T3.1</td><td>Dev B</td><td>CA-3.4; unit con fixtures</td></tr>
+<tr><td>T3.3</td><td><code>normalize</code> a modelo <code>Track</code> canónico (portada fallback, duraciones, licencia).</td><td>M</td><td>T3.2</td><td>Dev B</td><td>95 % cobertura; datos sucios cubiertos</td></tr>
+<tr><td>T3.4</td><td><code>cache</code> TTL 15 min (memoria + persistencia ligera) + modo offline navegable.</td><td>M</td><td>T3.3</td><td>Dev A</td><td>CA-3.3; unit 90 %</td></tr>
+<tr><td>T3.5</td><td><code>sidebar-panel</code> UI: input búsqueda, debounce 300 ms, lista virtualizada, spinner/skeleton, estados vacíos.</td><td>L</td><td>T3.3</td><td>Dev A</td><td>CA-3.1 &lt;2 s con caché caliente</td></tr>
+<tr><td>T3.6</td><td>Reproducción delegada: <code>host-api.play(streamUrl)</code> + metadatos + manejo de error playback con retry.</td><td>M</td><td>T3.5, T2.7</td><td>Dev A</td><td>CA-3.2; E2E parcial</td></tr>
+<tr><td>T3.7</td><td>Modo seguro por permisos: capability detection → degradación a solo-alertas sin romper host.</td><td>M</td><td>T1.7</td><td>Dev B</td><td>RF-15; integration</td></tr>
+<tr><td>T3.8</td><td>Adaptador Internet Archive detrás de <code>CatalogProvider</code> (feature flag experimental).</td><td>M</td><td>T3.3</td><td>Dev B</td><td>Intercambio de provider sin tocar UI</td></tr>
+<tr><td>T3.9</td><td>E2E completo H3 (buscar→reproducir→paginar→offline) en Win; nightly mac/Linux.</td><td>L</td><td>T3.5,T3.6</td><td>QA/dev</td><td>Gate <b>G3</b>: flujo E2E verde 3 runs seguidos</td></tr>
+</table>
+<p><b>Gate G3 (fin F3):</b> E2E buscar→reproducir estable; perf de búsqueda dentro de objetivo.</p>
+<h3 id="fase-4-calidad-empaque-s10s11-8-pts">FASE 4 — Calidad &amp; empaque (S10–S11, 8 pts)</h3>
+<table>
+<tr><th>ID</th><th>Tarea</th><th>Tamaño</th><th>Deps</th><th>Owner</th><th>Criterio de salida</th></tr>
+<tr><td>T4.1</td><td>i18n es/en + linter anti strings hardcodeados + detección idioma host.</td><td>M</td><td>G3</td><td>Dev B</td><td>RF-13, RNF-10</td></tr>
+<tr><td>T4.2</td><td>Atajo Ctrl+Shift+J + búsqueda rápida.</td><td>S</td><td>G3</td><td>Dev A</td><td>RF-14</td></tr>
+<tr><td>T4.3</td><td>Auditoría a11y axe-core en todas las escenas de alerta/panel; fixes.</td><td>M</td><td>G3</td><td>QA</td><td>RNF-07: 0 violaciones críticas</td></tr>
+<tr><td>T4.4</td><td>Perf: bench init/search/memoria en nightly; ajuste bundle ≤300 KB gzip.</td><td>M</td><td>G3</td><td>Dev A</td><td>RNF-01/02/03 medidos</td></tr>
+<tr><td>T4.5</td><td>Seguridad: whitelist de dominios en CI, CSP check, revisión de permisos.</td><td>S</td><td>G3</td><td>Dev B</td><td>RNF-05/11; matriz de permisos justificada</td></tr>
+<tr><td>T4.6</td><td>Docs: README, guía de usuario, API interna, CONTRIBUTING, CHANGELOG, ficha de market (descripción, capturas, vídeo 30 s).</td><td>L</td><td>G3</td><td>Todos</td><td>RNF-12; material listo para sumisión</td></tr>
+<tr><td>T4.7</td><td>Empaque: <code>release.yml</code> → zip determinista + checksum + notas; v0.9.0-beta.</td><td>M</td><td>T4.1–T4.6</td><td>Dev A</td><td>Artefacto instalable en host limpio</td></tr>
+<tr><td>T4.8</td><td>Beta testing: ≥20 usuarios, canal de feedback (GitHub issues plantilla), triage diario.</td><td>M</td><td>T4.7</td><td>QA</td><td>Gate <b>G4</b>: ≥80 % CAs validadas por beta, backlog de fixes priorizado</td></tr>
+</table>
+<h3 id="fase-5-estabilización-release-s12s13-5-pts">FASE 5 — Estabilización &amp; release (S12–S13, 5 pts)</h3>
+<table>
+<tr><th>ID</th><th>Tarea</th><th>Tamaño</th><th>Deps</th><th>Owner</th><th>Criterio de salida</th></tr>
+<tr><td>T5.1</td><td>Fix de bugs beta (P0/P1 = bloqueantes; P2 podado con criterio).</td><td>L</td><td>G4</td><td>Todos</td><td>0 P0/P1 abiertos</td></tr>
+<tr><td>T5.2</td><td>Migraciones de settings beta→final probadas (upgrade desde v0.x).</td><td>S</td><td>T5.1</td><td>Dev B</td><td>RF-18; test de migración</td></tr>
+<tr><td>T5.3</td><td>Regression suite completa + E2E en 3 OS; freeze de código.</td><td>M</td><td>T5.1</td><td>QA</td><td>Pipeline release verde</td></tr>
+<tr><td>T5.4</td><td>Publicación: tag v1.0.0, GitHub Release, sumisión al market de Strimio, seguimiento de revisión.</td><td>M</td><td>T5.3</td><td>Dev lead</td><td>Addon aprobable/visible en beta-listing</td></tr>
+<tr><td>T5.5</td><td>Retro del proyecto + plan v1.1 (post-release: más providers, playlists).</td><td>S</td><td>T5.4</td><td>Todos</td><td>Documento retro + backlog v1.x</td></tr>
+</table>
+<hr>
+<h2 id="10-cronograma-y-hitos">10. Cronograma y hitos</h2>
+<p>Calendario orientativo (inicio lunes S0 = 2026-11-16; sprints de 1 semana, equipo 1–2 devs):</p>
+<pre>Sem:  0      1   2     3   4   5     6   7   8   9    10  11    12  13   (+2 buffer)
+     [F0]  [----F1----][-----F2------][--------F3----------][--F4--][---F5---]
+Hitos:
+  M0  ✔ Reporte análisis (S0)
+  M1  Hello-world en host + contrato verificado (fin S2) — G1
+  M2  MVP alertas demo CA-H2 (fin S5) — G2
+  M3  E2E buscar→reproducir verde (fin S9) — G3
+  M4  Beta v0.9.0 publicada a testers (fin S11) — G4
+  M5  🚀 v1.0.0 submitted a market (fin S13)
+  M6  Ventana con buffer: S14–S15 si algún gate se desliza</pre>
+<p><b>Política de deslizamiento:</b> si un gate se retrasa &gt;3 días, se poda el backlog <i>Could</i> (HU-13/14) antes que <i>Must</i>; nunca se reduce calidad (cobertura, a11y, seguridad).</p>
+<hr>
+<h2 id="11-estimación">11. Estimación</h2>
+<h3 id="111-método">11.1 Método</h3>
+<p>Story points Fibonacci calibrados con F0 (huella de 3 pts = reporte actual); velocidad asumida 4–5 pts/semana con 1 dev full-time (2 devs part-time). Calendario = puntos/velocidad + buffer 20 % por incertidumbre de API del host (R-01/R-02).</p>
+<h3 id="112-totales-por-fase">11.2 Totales por fase</h3>
+<table>
+<tr><th>Fase</th><th>Pts</th><th>Sem</th><th>Coste estimado (1 dev senior, referencia mercado)</th></tr>
+<tr><td>F1</td><td>8</td><td>2</td><td>~2 sem</td></tr>
+<tr><td>F2</td><td>13</td><td>3</td><td>~3 sem</td></tr>
+<tr><td>F3</td><td>21</td><td>4</td><td>~4 sem</td></tr>
+<tr><td>F4</td><td>8</td><td>2</td><td>~2 sem</td></tr>
+<tr><td>F5</td><td>5</td><td>2</td><td>~2 sem</td></tr>
+<tr><td><b>Total</b></td><td><b>58</b></td><td><b>14</b></td><td><b>+20 % buffer ⇒ 16–17 sem</b></td></tr>
+</table>
+<h3 id="113-escenarios-de-riesgo-impacto-en-calendario">11.3 Escenarios de riesgo (impacto en calendario)</h3>
+<table>
+<tr><th>Escenario</th><th>Prob.</th><th>Impacto</th><th>Respuesta</th></tr>
+<tr><td>API host distinta a la asumida (V-01)</td><td>Media</td><td>+1–2 sem</td><td>Capa host-api ya aísla; re-adr 1 semana</td></tr>
+<tr><td>SweetAlert2 no bundlable (S-01)</td><td>Baja</td><td>+2 sem</td><td>Plan B: overlay propio mínimo (HU-02/03 reducidos)</td></tr>
+<tr><td>Rate-limit/caída Jamendo</td><td>Media</td><td>+3–5 d</td><td>Activar adaptador IA (T3.8) antes de G3</td></tr>
+<tr><td>Equipo 1 solo dev vs 2</td><td>Alta</td><td>±20 %</td><td>La tabla asume 1 FT; con 2 devs paralelizables F2∥F3 temprana</td></tr>
+</table>
+<hr>
+<h2 id="12-plan-de-pruebas">12. Plan de pruebas</h2>
+<table>
+<tr><th>Nivel</th><th>Herramienta</th><th>Alcance</th><th>Frecuencia</th><th>Gate</th></tr>
+<tr><td>Unitarias</td><td>Jest + jsdom + sinon + mocks HostContext</td><td>swal-bridge, queue, normalize, cache, config-store, logger</td><td>Cada PR</td><td>Cobertura ≥80 % líneas / ≥75 % ramas</td></tr>
+<tr><td>Contrato</td><td>JSON-schema manifest + type-check ctx</td><td>Compatibilidad manifiesto/host</td><td>Cada PR</td><td>0 errores</td></tr>
+<tr><td>Integración</td><td>Stub PluginManager carga <code>dist/main.js</code> real</td><td>init/destroy, registro provider, limpieza listeners, modo seguro</td><td>Cada PR</td><td>Suite verde</td></tr>
+<tr><td>E2E</td><td>Playwright sobre Strimio instalado</td><td>Flujos H1–H4 completos (instalar→buscar→reproducir→alertar→desinstalar)</td><td>Nightly + pre-release</td><td>3 runs consecutivos verdes para gates</td></tr>
+<tr><td>Visual/regresión</td><td>Snapshots de modales claro/oscuro</td><td>Estética swal</td><td>PR con etiqueta <code>ui</code></td><td>Diff aprobado</td></tr>
+<tr><td>Rendimiento</td><td><code>scripts/bench.mjs</code> (init, búsqueda, heap)</td><td>RNF-01/02/03</td><td>Nightly</td><td>init&lt;150 ms, bundle≤300 KB, Δheap&lt;2 MB ×10 ciclos</td></tr>
+<tr><td>Accesibilidad</td><td>axe-core en escenas de alerta/panel</td><td>RNF-07</td><td>Release</td><td>0 violaciones críticas</td></tr>
+<tr><td>Seguridad</td><td>npm audit high-blocking, whitelist dominios, CSP check</td><td>RNF-05/11</td><td>CI</td><td>Verde</td></tr>
+<tr><td>Beta externa</td><td>20+ usuarios, issue templates, NPS</td><td>Usabilidad + crash-rate</td><td>F4–F5</td><td>≥80 % CAs confirmadas, 0 P0/P1</td></tr>
+</table>
+<p><b>Matriz de trazabilidad (extracto):</b> RF-01→T1.3/T1.5·CA-1.1 · RF-03→T2.1·CA-2.1/2.2 · RF-04/05/06→T3.2/T3.5/T3.6·CA-3.1/3.2 · RF-07→T2.7·CA-2.1 · RF-08→T2.4·CA-4.1 · RF-10→T3.4·CA-3.3 · RF-11→T2.2·CA-2.4 · RF-12→T2.3·CA-2.3 · RF-15→T3.7 · RF-16→T1.2(logger) · RF-17→T2.6·CA-1.3. (Completa en anexo CSV generado por <code>scripts/trace.mjs</code> en T4.6.)</p>
+<hr>
+<h2 id="13-criterios-de-aceptación-y-dod">13. Criterios de aceptación y DoD</h2>
+<p>Se heredan íntegros del informe F0 (§12): CA-1.1..CA-4.2 en formato Dado/Cuando/Entonces, vinculados a tareas en el §12 superior. Reglas adicionales del roadmap:</p>
+<ul>
+<li>Cada PR debe referenciar tarea WBS (ID) y CA/HU; sin referencia no se mergea (bot <code>pr-check</code>).</li>
+<li><b>DoD de release v1.0.0:</b> todas las CAs <i>Must</i> verificadas en host real (3 OS) + suite E2E verde ×3 + beta sin P0/P1 + documentación de market completa + zip reproducible con checksum + política de soporte definida (fixes críticos ≤72 h).</li>
+</ul>
+<hr>
+<h2 id="14-métricas-y-kpis">14. Métricas y KPIs</h2>
+<p><b>Ingeniería (medidas por CI/nightly):</b></p>
+<ul>
+<li>Cobertura ≥80 % línea / ≥75 % rama (por módulo según §6).</li>
+<li>Tiempo CI &lt;6 min; pipelines verdes ≥90 %.</li>
+<li>Lead time issue→merge &lt;3 días laborables; WIP ≤2 por dev.</li>
+<li>Size-check: bundle ≤300 KB gzip (hard fail).</li>
+<li>Burn-down por fase desviación ≤15 % (revisión semanal).</li>
+</ul>
+<p><b>Producto (beta + post-lanzamiento):</b></p>
+<ul>
+<li>Tasa de activación post-instalación ≥70 %.</li>
+<li>Búsquedas/semana por usuario activo ≥3; tiempo hasta primera reproducción &lt;60 s.</li>
+<li>Crash-rate atribuible ≈0; adopción de toasts now-playing ≥40 % (para calibrar defaults).</li>
+<li>Valoración market ≥4,2/5; NPS beta ≥30.</li>
+</ul>
+<p><b>Dashboard:</b> tablero simple en <code>docs/metrics.md</code> actualizado semanalmente + badges en README (coverage, CI, size).</p>
+<hr>
+<h2 id="15-riesgos-y-mitigación">15. Riesgos y mitigación</h2>
+<p>Registro vivo (se revisa en planning de cada sprint). Score = P×I (1–3×1–3).</p>
+<table>
+<tr><th>ID</th><th>Riesgo</th><th>P</th><th>I</th><th>Score</th><th>Mitigación</th><th>Trigger plan B</th><th>Owner</th></tr>
+<tr><td>R-01</td><td>API del host cambia/está insuficientemente documentada</td><td>A</td><td>A</td><td>9</td><td>T1.1/V-01 primero; capa host-api; pin engines; suite de contrato</td><td>Si V-01 revela ruptura: re-diseño 1 sem en F1</td><td>Dev lead</td></tr>
+<tr><td>R-02</td><td>Loader no permite bundlear SweetAlert2</td><td>M</td><td>A</td><td>6</td><td>Spike T1.3/S-01 temprano</td><td>Overlay propio mínimo (plan B, +2 sem, recorta HU-04)</td><td>Dev A</td></tr>
+<tr><td>R-03</td><td>Jamendo limita API/cambia esquema</td><td>M</td><td>M</td><td>4</td><td>Fixtures + adaptadores intercambiables; IA como segundo provider</td><td>Activar T3.8 antes de G3</td><td>Dev B</td></tr>
+<tr><td>R-04</td><td>Conflicto de estilos con tema del host</td><td>M</td><td>B</td><td>2</td><td>Namespacing CSS + snapshots visuales</td><td>Variables override documentadas</td><td>Dev B</td></tr>
+<tr><td>R-05</td><td>Fugas por listeners no retirados</td><td>M</td><td>A</td><td>6</td><td>subscription-registry + leak-check T2.6</td><td>Automatizar en nightly</td><td>Dev A</td></tr>
+<tr><td>R-06</td><td>Rechazo en revisión del market (permisos excesivos)</td><td>B</td><td>M</td><td>3</td><td>Manifiesto mínimo privilegio + README de justificación</td><td>Iterar permisos en F5</td><td>Dev lead</td></tr>
+<tr><td>R-07</td><td>Deslizamiento de calendario por equipo pequeño</td><td>A</td><td>M</td><td>6</td><td>Gates con política de poda (<i>Could</i> primero); buffer 20 %</td><td>Recortar HU-13/14, mover a v1.1</td><td>Todos</td></tr>
+<tr><td>R-08</td><td>Beta con baja participación (&lt;20 testers)</td><td>M</td><td>M</td><td>4</td><td>Reclutamiento desde S9; comunidad Strimio/Discord; build portable zip</td><td>Ampliar a 10 testers + triage intensivo</td><td>QA</td></tr>
+</table>
+<hr>
+<h2 id="16-plan-de-releases">16. Plan de releases</h2>
+<table>
+<tr><th>Release</th><th>Contenido</th><th>Fecha prevista</th><th>Criterio</th></tr>
+<tr><td>v0.1.0 (interno)</td><td>Hello-world + scaffold + CI</td><td>Fin S2</td><td>G1</td></tr>
+<tr><td>v0.5.0 (interno/demo)</td><td>MVP alertas</td><td>Fin S5</td><td>G2, demo stakeholders</td></tr>
+<tr><td>v0.8.0 (interno)</td><td>Provider funcional E2E</td><td>Fin S9</td><td>G3</td></tr>
+<tr><td><b>v0.9.0-beta</b></td><td>Feature-complete, a testers</td><td>Fin S11</td><td>G4</td></tr>
+<tr><td><b>v1.0.0</b></td><td>Stable, sumisión market</td><td>Fin S13 (±buffer)</td><td>DoD release §13</td></tr>
+<tr><td>v1.0.x</td><td>Parches post-launch (SLA crítico ≤72 h)</td><td>continuo</td><td>—</td></tr>
+<tr><td>v1.1 (backlog)</td><td>Multi-provider, playlists, letras</td><td>Q+1</td><td>Retro T5.5</td></tr>
+</table>
+<p>Versionado SemVer; changelog Keep-a-Changelog; artefactos: zip + SHA-256 en GitHub Releases.</p>
+<hr>
+<h2 id="17-proceso-de-trabajo">17. Proceso de trabajo</h2>
+<ul>
+<li><b>Ramas:</b> <code>main</code> protegida (PR + 1 review + CI verde), <code>feat/T&lt;x.y&gt;-slug</code>, <code>fix/…</code>. Commits Conventional Commits; bot pr-check valida referencia a HU/CA/tarea.</li>
+<li><b>Rituales (equipo 1–2 personas, ligeros):</b> planning de sprint (lunes, 30 min: seleccionar tareas WBS, actualizar riesgos), demo de fin de sprint contra host real, retro al cierre de cada gate, revisión de riesgos semanal.</li>
+<li><b>Gestión:</b> tablero GitHub Projects con columnas Todo/Doing/Review/Done; etiquetas <code>phase:F1..F5</code>, <code>gate:G1..G4</code>, <code>type:spike|risk|qa</code>.</li>
+<li><b>Definition of Ready:</b> una tarea entra a Doing solo con deps satisfechas, CA clara y tests previstos escritos (TDD donde aplique).</li>
+<li><b>Criterio de parada (stop-loss):</b> si al fin de F2 la velocidad acumulada &lt;60 % de lo estimado, se renegocia alcance v1 (provider pasa a v1.1, se lanza solo alert-bridge v1.0 antes).</li>
+</ul>
+<hr>
+<h2 id="18-anexos">18. Anexos</h2>
+<ul>
+<li><b>A.</b> Borrador de <code>manifest.json</code> y <code>interface HostContext</code> asumida → ver informe F0 §18 (pendiente de validación en T1.1).</li>
+<li><b>B.</b> Modelo <code>Track</code> canónico: <code>{ id, title, artist, album?, artworkUrl?, durationSec, streamUrl, source:'jamendo'|'archive', license }</code>.</li>
+<li><b>C.</b> Plantilla de historia/bug para beta: pasos, versión Strimio, SO, log addon, expected vs actual.</li>
+<li><b>D.</b> Documentos relacionados: <code>docs/reporte-analisis-tecnico.html</code> (F0), <code>docs/host-contract.md</code> (salida de T1.1), <code>docs/metrics.md</code> (KPIs semanales).</li>
+</ul>
+<hr>
+<p><i>Roadmap v1.0 — documento vivo: cualquier cambio de alcance, estimación o arquitectura se registra aquí con fecha y justificación (tabla de cambios abajo).</i></p>
+<h2 id="historial-de-cambios">Historial de cambios</h2>
+<table>
+<tr><th>Fecha</th><th>Versión</th><th>Cambio</th></tr>
+<tr><td>2026-11-13</td><td>1.0</td><td>Creación a partir del informe F0</td></tr>
+</table>
+</main>
+</div>
+</body>
+</html>
